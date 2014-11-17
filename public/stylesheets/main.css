@@ -1,0 +1,10 @@
+.form-group{
+    direction: rtl;
+}
+
+.controlPanel{
+    background-color: #eee;
+    border: solid 1px #ccc;
+    border-radius: 6px;
+    padding: 5px 5px;
+}
