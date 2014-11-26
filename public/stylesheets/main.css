@@ -1,10 +1,114 @@
-.form-group{
+
+.workspace-form{
     direction: rtl;
+    margin-right: 20px;
 }
 
+.long-input{
+    width: 400px !important;
+}
+.in-input{
+    margin-right: -30px;
+}
 .controlPanel{
     background-color: #eee;
     border: solid 1px #ccc;
     border-radius: 6px;
     padding: 5px 5px;
+}
+.workspace{
+    position: absolute;
+    margin-top: 2px;
+}
+
+.inactive-box{
+    background-color: #bbb;
+}
+
+.box{
+    position: absolute;
+    margin: 1px;
+}
+.fullBox, .inactive-box, .active-box{
+    width: 100%;
+    height: 100%;
+    border-radius: 0.2em;
+}
+.active-box {
+    background-color: #0f0;
+    text-align: right;
+    padding: 15px;
+    font-size: 1.5em;
+}
+.active-box > .info{
+    height: 70%;
+}
+.active-box > .options{
+    float: left;
+}
+.add-icon{
+    font-size: 4em;
+    top: 40%;
+    left: 42%;
+    cursor: pointer;
+}
+.modal  {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    width: 100%;
+    height: 120%;
+
+  -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+.modal-dialog{
+    position: inherit;
+    top: 40%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: rgba(0,0,0,.7);
+}
+
+.modal-content {
+    text-align:right;
+}
+.modal-footer {
+    text-align:left;
+}
+
+
+.left-close{
+    float: left;
+}
+
+.animate-show {
+    line-height: 34px;
+    opacity: 1;
+}
+
+
+.animate-show.ng-hide-add.ng-hide-add-active,
+.animate-show.ng-hide-remove.ng-hide-remove-active {
+    -webkit-transition: all linear 0.3s;
+    transition: all linear 0.3s;
+}
+
+.animate-show.ng-hide {
+    line-height: 0;
+    opacity: 0;
+}
+.draggable {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0);
+    position: absolute;
+    margin-top: -26px;
+    margin-left: -12px;
+    z-index: 1000;
 }

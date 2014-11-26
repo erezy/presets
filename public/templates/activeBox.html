@@ -1,0 +1,12 @@
+<div class="active-box">
+    <div class="info">
+        <p>{{box.type | boxType}}</p>
+    </div>
+    <div class="options">
+        <button class="btn btn-danger glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteBox()"></button>
+        <button class="btn btn-warning  glyphicon glyphicon-pencil" aria-hidden="true"
+              bs-modal="modal" data-template="templates/editBox.html"></button>
+        <div class="btn btn-primary glyphicon glyphicon-fullscreen" aria-hidden="true" ><div my-draggable class="draggable"></div></div>
+        <button class="btn btn-info glyphicon glyphicon-resize-small" aria-hidden="true" ng-click="collapseBox()" ng-show="resize"></button>
+    </div>
+</div>

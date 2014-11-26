@@ -1,0 +1,32 @@
+<div class="modal" tabindex="-1" role="dialog" ng-controller="editBoxCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" ng-show="title">
+                <button type="button" class="close left-close" ng-click="close()">&times;</button>
+                <h4 class="modal-title" ng-bind="title"></h4>
+            </div>
+            <div class="row modal-body">
+                <form   class="container-fluid" name="editForm" role="form">
+                    <div class="row form-group">
+                         <div class="col-sm-4 col-sm-offset-8">
+                            <select class="form-control" required ng-change="changeForm()"
+                                   ng-model="editForm.selectedBoxType" >
+                                <option value="" selected disabled>בחר סוג חלון</option>
+                                <option  ng-repeat="type in boxTypes" value="{{type.id}}">{{type.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group animate-show" ng-show="optionalField">
+                        <div class="col-sm-6 col-sm-offset-6">
+                            <input type="text" class="form-control" ng-model="editForm.url" ng-required="optionalField"  placeholder="כתובת" type="text">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()">שמור</button>
+                <button type="button" class="btn btn-danger" ng-click="close()">סגור</button>
+            </div>
+        </div>
+    </div>
+</div>
