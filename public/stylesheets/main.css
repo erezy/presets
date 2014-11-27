@@ -28,6 +28,7 @@
 .box{
     position: absolute;
     margin: 1px;
+
 }
 .fullBox, .inactive-box, .active-box{
     width: 100%;
@@ -111,4 +112,25 @@
     margin-top: -26px;
     margin-left: -12px;
     z-index: 1000;
+}
+.wsStatus{
+    background-color: beige;
+    width: 100%;
+    height: 100%;
+    text-align: right;
+    padding: 15px;
+    overflow: auto;
+}
+.wsStatus > p{
+    text-decoration: underline;
+    font-size: 1.5em;
+    color: brown;
+}
+.wsStatus > dl > dt{
+    float: right;
+    width: 160px;
+}
+
+.iframe{
+    height: 100%;
 }

@@ -1,9 +1,9 @@
 var configModule = angular.module('configModule',['ngAnimate', 'mgcrea.ngStrap']);
 configModule.constant('WORKSPACE_SIZE', { row:4,col:5,size:20 } );
-configModule.constant('BOX_TYPES',  [{id:'1', name:'דף אינטרנט'},
-                                    {id:'2', name:'קובץ'},
-                                    {id:'3', name:'מצב עבודה'},
-                                    {id:'4', name:'מפה'}]
+configModule.constant('BOX_TYPES',  [{id:'1', name:'דף אינטרנט',form:"",html:"types/iframe"},
+                                    {id:'2', name:'קובץ',form:"",html:"types/iframe"},
+                                    {id:'3', name:'מצב עבודה',form:"",html:"types/workspaceStatus"},
+                                    {id:'4', name:'מפה',form:"",html:""}]
                         );
 configModule.filter('boxType',function(BOX_TYPES){
     return function(typeId){
@@ -31,6 +31,14 @@ configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
     };
     this.getBoxTypes = function(){
         return BOX_TYPES;
+    };
+    this.getTemplateByTypeId = function(typeId){
+        for (key in BOX_TYPES){
+            if(BOX_TYPES[key].id == typeId){
+                return BOX_TYPES[key].html;
+            }
+        }
+        return "";
     };
     this.isInArea = function(box,borders){
         var top = box.location[0]*(this.height+1)+this.getHeaderHeight();
@@ -71,6 +79,10 @@ configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
         for (var row = minRow; row <= maxRow; row++) {
             for (var col = minCol; col <= maxCol; col++) {
                 box = boxes[row*WORKSPACE_SIZE.col+col];
+
+                if ((box.isSet && box.id != chosenId) || (box.hidden && box.underBox != chosenId)) {
+                    return null;
+                }
                 if(box.id != chosenId){
                     box.hidden = true;
                     box.underBox = chosenId;

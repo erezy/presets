@@ -4,7 +4,20 @@ var uiModule = angular.module('uiModule',['configModule']);
 uiModule.directive('workspace',function($compile,boxUtils){
     var buildViewWorkspace = function(scope,element){
         var workspace = scope.currWorkspace;
-
+        if(workspace.boxes) {
+            var boxes = workspace.boxes;
+            var childScope,box;
+            for (var i = 0; i < boxes.length; i++) {
+                box = boxes[i];
+                if(box.isSet) {
+                    childScope = scope.$new();
+                    childScope.wsData = workspace.data;
+                    childScope.box = box;
+                    childScope.templ = boxUtils.getTemplateByTypeId(box.type);
+                    element.append($compile('<box class="box"/>')(childScope));
+                }
+            }
+        }
     };
     var buildEditWorkspace = function(scope,element){
         var workspace = scope.currWorkspace;
@@ -17,9 +30,9 @@ uiModule.directive('workspace',function($compile,boxUtils){
                     childScope = scope.$new();
                     childScope.box = box;
                     if(box.isSet){
-                        childScope.templ = "active";
+                        childScope.templ = "activeBox";
                     }else{
-                        childScope.templ = "inactive";
+                        childScope.templ = "inactiveBox";
                     }
                     element.append($compile('<box class="box"/>')(childScope));
                 }
@@ -83,9 +96,9 @@ uiModule.directive('box',function(boxUtils){
         require: '^workspace',
         restrict: 'E',
        link: function(scope, element, attrs, tabsCtrl) {
-           scope.contentUrl = 'templates/' + scope.templ + 'Box.html';
+           scope.contentUrl = 'templates/' + scope.templ + '.html';
            scope.$watch("templ",function(templ){
-               scope.contentUrl = 'templates/' + templ + 'Box.html';
+               scope.contentUrl = 'templates/' + templ + '.html';
            });
 
            var box = scope.box;
@@ -104,7 +117,10 @@ uiModule.directive('box',function(boxUtils){
                scope.resize = true;
            }
         },
-        controller: function ($scope,$timeout) {
+        controller: function ($scope,$timeout,$sce) {
+            $scope.getSrc = function(){
+                return $sce.trustAsResourceUrl($scope.box.url);
+            }
             $scope.collapseBox = function(){
                 $scope.$emit('collapseBox',$scope.box.id);
             }
@@ -124,7 +140,7 @@ uiModule.directive('box',function(boxUtils){
             $scope.$on('editSave', function(event,form) {
                 event.stopPropagation();
                var box = $scope.box;
-                $scope.templ = "active";
+                $scope.templ = "activeBox";
                 box.isSet = true;
                 box.type = form.selectedBoxType;
                 box.url = form.url;

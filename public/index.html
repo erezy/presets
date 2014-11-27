@@ -21,14 +21,14 @@
             <div class="form-inline workspace-form">
                 <div class="form-group">
                     <label class="control-label">מצב עבודה</label>
-                        <select class="form-control input-sm" ng-change="changeWorkspace()" ng-disabled="isEdit" ng-options="workspace as workspace.name for workspace in workspaces" ng-model="currentWorkspace"></select>
+                        <select class="form-control input-sm" ng-change="changeWorkspace()" ng-disabled="isEdit" ng-options="workspace as workspace.data.name for workspace in workspaces" ng-model="currentWorkspace"></select>
                 </div>
                 <form ng-show="isEdit" name="workspaceForm" role="form">
-                    <input type="text" class="form-control input-sm" ng-model="currentWorkspace.name" placeholder="שם מצב עבודה">
-                    <input type="text" class="form-control input-sm long-input" ng-model="currentWorkspace.description" placeholder="תאור מצב עבודה">
+                    <input type="text" class="form-control input-sm" ng-model="currentWorkspace.data.name" placeholder="שם מצב עבודה">
+                    <input type="text" class="form-control input-sm long-input" ng-model="currentWorkspace.data.description" placeholder="תאור מצב עבודה">
                     <div class="form-group" ng-class="{'has-error': workspaceForm.date.$invalid}">
                         <label class="control-label">תאריך פקיעת תוקף </label>
-                        <input type="text" class="form-control" ng-model="currentWorkspace.expiredDate" name="date" bs-datepicker>
+                        <input type="text" class="form-control" ng-model="currentWorkspace.data.expiredDate" name="date" bs-datepicker>
                         <span class="glyphicon glyphicon-calendar in-input"></span>
                     </div>
                     <button ng-click="saveWorkspace()"  title="שמור שינויים"class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>

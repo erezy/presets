@@ -20,7 +20,8 @@ serverModule.factory('workspaceServices',function(boxProvider,WORKSPACE_SIZE,sto
        getNewWorkspace: function(){
            function workspace(){
                this.boxes = [];
-               this.expiredDate = new Date((new Date()).getTime() + 24*60*60*1000);
+               this.data = {};
+               this.data.expiredDate = new Date((new Date()).getTime() + 24*60*60*1000);
            }
            var newWorkspace = new  workspace();
            var boxes = [];
@@ -35,11 +36,11 @@ serverModule.factory('workspaceServices',function(boxProvider,WORKSPACE_SIZE,sto
        },
        getLastWorkspace: function(workspaces){
            var currentWorkspace = storage.getObj('lastWorkspaceObject') || {};
-           if(workspaces && currentWorkspace.name) {
+           if(workspaces.length > 0 && currentWorkspace.data.name) {
                var ws;
                for (var i = 0; i < workspaces.length;i++){
                    ws = workspaces[i];
-                   if(ws.name == currentWorkspace.name){
+                   if(ws.data.name == currentWorkspace.data.name){
                        return ws;
                    }
                }
