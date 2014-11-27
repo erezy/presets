@@ -13,7 +13,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
                     childScope = scope.$new();
                     childScope.wsData = workspace.data;
                     childScope.box = box;
-                    childScope.templ = boxUtils.getTemplateByTypeId(box.type);
+                    childScope.templ = boxUtils.getTemplateByTypeId(box.type,false);
                     element.append($compile('<box class="box"/>')(childScope));
                 }
             }
@@ -91,7 +91,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
     }
 });
 
-uiModule.directive('box',function(boxUtils){
+uiModule.directive('box',function(boxUtils,$timeout){
     return {
         require: '^workspace',
         restrict: 'E',
@@ -99,6 +99,10 @@ uiModule.directive('box',function(boxUtils){
            scope.contentUrl = 'templates/' + scope.templ + '.html';
            scope.$watch("templ",function(templ){
                scope.contentUrl = 'templates/' + templ + '.html';
+               if(templ == "types/map"){
+                   $timeout(function (){ var viewer = new Cesium.Viewer('cesiumContainer');console.log(viewer);},100);
+
+               }
            });
 
            var box = scope.box;
@@ -119,7 +123,7 @@ uiModule.directive('box',function(boxUtils){
         },
         controller: function ($scope,$timeout,$sce) {
             $scope.getSrc = function(){
-                return $sce.trustAsResourceUrl($scope.box.url);
+                return $sce.trustAsResourceUrl($scope.box.formData.url);
             }
             $scope.collapseBox = function(){
                 $scope.$emit('collapseBox',$scope.box.id);
@@ -129,12 +133,9 @@ uiModule.directive('box',function(boxUtils){
             }
             $scope.$on('editStart', function(event) {
                 event.stopPropagation();
-                var form = {};
                 var box = $scope.box;
                 if(box.isSet){
-                    form.selectedBoxType = box.type;
-                    form.url = box.url;
-                    $timeout(function(){$scope.$broadcast('initBox',form)},500);
+                    $timeout(function(){$scope.$broadcast('initBox',box)},500);
                 }
              });
             $scope.$on('editSave', function(event,form) {
@@ -142,8 +143,9 @@ uiModule.directive('box',function(boxUtils){
                var box = $scope.box;
                 $scope.templ = "activeBox";
                 box.isSet = true;
+                box.formData = form.data;
                 box.type = form.selectedBoxType;
-                box.url = form.url;
+
             });
             $scope.$on('theChosenOne', function(event) {
                 event.stopPropagation();
@@ -158,24 +160,24 @@ uiModule.directive('box',function(boxUtils){
 uiModule.controller('editBoxCtrl',function($scope,boxUtils){
     $scope.boxTypes = boxUtils.getBoxTypes();
    $scope.title = "חלון עבודה" ;
-    $scope.optionalField = false;
-    var unbind = $scope.$on('initBox',function(event,form){
-        $scope.editForm.selectedBoxType = form.selectedBoxType;
-        $scope.editForm.url = form.url;
-        $scope.handleOptionalFields();
+    $scope.$watch("formTempl",function(templ){
+        $scope.contentUrl = "";
+        if(templ) {
+            $scope.contentUrl = 'templates/forms/' + templ + '.html';
+        }
+    });
+    $scope.$emit('editStart');
+
+    var unbind = $scope.$on('initBox',function(event,box){
+        $scope.formTempl = boxUtils.getTemplateByTypeId(box.type,true);
+        $scope.editForm.selectedBoxType = box.type;
+        $scope.editForm.data = box.formData;
     });
     $scope.$on('$destroy',unbind);
-    $scope.$emit('editStart');
-    $scope.handleOptionalFields = function(){
-        if($scope.editForm.selectedBoxType == '1' || $scope.editForm.selectedBoxType == '2'){
-            $scope.optionalField = true;
-        }else{
-            $scope.optionalField = false;
-        }
-    };
     $scope.changeForm = function(){
-        $scope.handleOptionalFields();
-        $scope.editForm.url = null;
+        $scope.editForm.data = {};
+        $scope.formTempl = boxUtils.getTemplateByTypeId($scope.editForm.selectedBoxType,true);
+
     };
     $scope.save = function(){
         $scope.$emit('editSave',$scope.editForm);
@@ -183,6 +185,7 @@ uiModule.controller('editBoxCtrl',function($scope,boxUtils){
         $scope.$destroy();
     };
     $scope.close = function(){
+        $scope.editForm = {};
         $scope.$hide();
         $scope.$destroy();
     };

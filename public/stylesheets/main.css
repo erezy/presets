@@ -22,13 +22,12 @@
 }
 
 .inactive-box{
-    background-color: #bbb;
+    background-color: #ccd;
 }
 
 .box{
     position: absolute;
     margin: 1px;
-
 }
 .fullBox, .inactive-box, .active-box{
     width: 100%;
@@ -36,10 +35,11 @@
     border-radius: 0.2em;
 }
 .active-box {
-    background-color: #0f0;
+    background-color: #99b;
     text-align: right;
     padding: 15px;
     font-size: 1.5em;
+    color: #fff;
 }
 .active-box > .info{
     height: 70%;
@@ -62,6 +62,9 @@
 
   -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
+}
+.modal-title{
+    color: #000000;
 }
 .modal-dialog{
     position: inherit;
@@ -127,10 +130,18 @@
     color: brown;
 }
 .wsStatus > dl > dt{
+     float: right;
+     width: 160px;
+     clear: right;
+ }
+.wsStatus > dl > dd{
     float: right;
-    width: 160px;
+    height: 20px;
 }
 
 .iframe{
     height: 100%;
+}
+#cesiumContainer {
+    width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
 }

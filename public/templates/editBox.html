@@ -16,11 +16,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row form-group animate-show" ng-show="optionalField">
-                        <div class="col-sm-6 col-sm-offset-6">
-                            <input type="text" class="form-control" ng-model="editForm.url" ng-required="optionalField"  placeholder="כתובת" type="text">
-                        </div>
-                    </div>
+                    <div class="row" ng-include="contentUrl" ></div>
                 </form>
             </div>
             <div class="modal-footer">

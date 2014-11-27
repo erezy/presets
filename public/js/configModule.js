@@ -1,9 +1,9 @@
 var configModule = angular.module('configModule',['ngAnimate', 'mgcrea.ngStrap']);
 configModule.constant('WORKSPACE_SIZE', { row:4,col:5,size:20 } );
-configModule.constant('BOX_TYPES',  [{id:'1', name:'דף אינטרנט',form:"",html:"types/iframe"},
-                                    {id:'2', name:'קובץ',form:"",html:"types/iframe"},
+configModule.constant('BOX_TYPES',  [{id:'1', name:'דף אינטרנט',form:"url",html:"types/iframe"},
+                                    {id:'2', name:'קובץ',form:"url",html:"types/iframe"},
                                     {id:'3', name:'מצב עבודה',form:"",html:"types/workspaceStatus"},
-                                    {id:'4', name:'מפה',form:"",html:""}]
+                                    {id:'4', name:'מפה',form:"",html:"types/map"}]
                         );
 configModule.filter('boxType',function(BOX_TYPES){
     return function(typeId){
@@ -32,10 +32,14 @@ configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
     this.getBoxTypes = function(){
         return BOX_TYPES;
     };
-    this.getTemplateByTypeId = function(typeId){
+    this.getTemplateByTypeId = function(typeId,isForm){
         for (key in BOX_TYPES){
             if(BOX_TYPES[key].id == typeId){
-                return BOX_TYPES[key].html;
+                if(isForm) {
+                    return BOX_TYPES[key].form;
+                }else{
+                    return BOX_TYPES[key].html;
+                }
             }
         }
         return "";
