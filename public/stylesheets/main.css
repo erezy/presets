@@ -42,7 +42,7 @@
     color: #fff;
 }
 .active-box > .info{
-    height: 70%;
+    height: 80%;
 }
 .active-box > .options{
     float: left;
@@ -107,7 +107,7 @@
     line-height: 0;
     opacity: 0;
 }
-.draggable {
+.expendable {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0);
@@ -144,4 +144,15 @@
 }
 #cesiumContainer {
     width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+}
+.dragButton{
+    height: 20px;
+    width: 100%;
+    border-radius: 0.5em;
+    border: solid 0.5px;
+    box-shadow: 0px 3px 5px #333;
+}
+.btn{
+    box-shadow: 0px 0px 5px #555;
+    margin: 0px 2px;
 }

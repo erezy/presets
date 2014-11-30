@@ -32,6 +32,18 @@ configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
     this.getBoxTypes = function(){
         return BOX_TYPES;
     };
+    this.switchBoxes = function(boxes,boxId,droppedBoxId){
+        var dest = boxes[boxId];
+        var origin = boxes[droppedBoxId];
+        dest.id = droppedBoxId;
+        origin.id = boxId;
+        dest.location = origin.location;
+        origin.location = dest.firstLocation;
+        dest.firstLocation = dest.location;
+        origin.firstLocation = origin.location;
+        boxes[droppedBoxId] = dest;
+        boxes[boxId] = origin;
+    }
     this.getTemplateByTypeId = function(typeId,isForm){
         for (key in BOX_TYPES){
             if(BOX_TYPES[key].id == typeId){

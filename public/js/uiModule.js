@@ -1,4 +1,4 @@
-var uiModule = angular.module('uiModule',['configModule']);
+var uiModule = angular.module('uiModule',['configModule','ang-drag-drop']);
 
 
 uiModule.directive('workspace',function($compile,boxUtils){
@@ -14,7 +14,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
                     childScope.wsData = workspace.data;
                     childScope.box = box;
                     childScope.templ = boxUtils.getTemplateByTypeId(box.type,false);
-                    element.append($compile('<box class="box"/>')(childScope));
+                    element.append($compile('<box class="box" />')(childScope));
                 }
             }
         }
@@ -31,10 +31,12 @@ uiModule.directive('workspace',function($compile,boxUtils){
                     childScope.box = box;
                     if(box.isSet){
                         childScope.templ = "activeBox";
+                        childScope.draggable = true;
                     }else{
                         childScope.templ = "inactiveBox";
+                        childScope.draggable = false;
                     }
-                    element.append($compile('<box class="box"/>')(childScope));
+                    element.append($compile('<box class="box" />')(childScope));
                 }
             }
         }
@@ -50,6 +52,13 @@ uiModule.directive('workspace',function($compile,boxUtils){
             $scope.$on('setTheChosenOne',function(event,chosenId){
                 event.stopPropagation();
                 this.chosenId = chosenId;
+            });
+            $scope.$on('dragBox',function(event,boxId,droppedBoxId){
+                event.stopPropagation();
+                var boxes = $scope.currWorkspace.boxes;
+                boxUtils.switchBoxes(boxes,boxId,droppedBoxId);
+                console.log("dragBox",boxes);
+                $scope.$emit('updateWorkspace',boxes);
             });
             $scope.$on('expendBox',function(event,borders){
                 event.stopPropagation();
@@ -119,7 +128,9 @@ uiModule.directive('box',function(boxUtils,$timeout){
            element.css(styles);
            if(box.size[0] > 1 || box.size[1] > 1){
                scope.resize = true;
+               scope.draggable = false;
            }
+
         },
         controller: function ($scope,$timeout,$sce) {
             $scope.getSrc = function(){
@@ -131,6 +142,17 @@ uiModule.directive('box',function(boxUtils,$timeout){
             $scope.deleteBox = function(){
                 $scope.$emit('deleteBox',$scope.box.id);
             }
+
+            $scope.onDrop = function($event,droppedBox){
+                console.log("onDrop",$event,droppedBox);
+                var box = $scope.box;
+                if(box.size[0] > 1 || box.size[1] > 1) {
+                    alert("לא ניתן להעביר אריחים גדולים");
+                    return false;
+                }
+                $scope.$emit('dragBox',box.id,droppedBox.id);
+            };
+
             $scope.$on('editStart', function(event) {
                 event.stopPropagation();
                 var box = $scope.box;
@@ -192,7 +214,7 @@ uiModule.controller('editBoxCtrl',function($scope,boxUtils){
 
 });
 
-uiModule.directive('myDraggable', ['$document', function($document) {
+uiModule.directive('expended', ['$document', function($document) {
         return function (scope, element, attr) {
                 var startX = 0, startY = 0, x = 0, y = 0, styles = {};
 
