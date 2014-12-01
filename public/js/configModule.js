@@ -140,7 +140,9 @@ configModule.config(function($datepickerProvider) {
     var tomorrow = new Date();
     angular.extend($datepickerProvider.defaults, {
         dateFormat: 'dd/MM/yyyy',
-        minDate: tomorrow
+        minDate: tomorrow,
+        iconRight: 'glyphicon glyphicon-chevron-left',
+        iconLeft: 'glyphicon glyphicon-chevron-right'
     });
 })
 configModule.config(function($modalProvider) {

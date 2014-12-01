@@ -152,7 +152,7 @@
     border: solid 0.5px;
     box-shadow: 0px 3px 5px #333;
 }
-.btn{
+.btn-shadow{
     box-shadow: 0px 0px 5px #555;
     margin: 0px 2px;
 }
