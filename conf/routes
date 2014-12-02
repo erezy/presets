@@ -3,9 +3,30 @@
 # ~~~~
 
 # Home page
+GET     /                                                                   controllers.Assets.at(path="/public", file="/index.html")
+
+# Workspaces controller
+GET     /api/workspaces                                                     @controllers.api.WorkspacesController.getAll()
+GET     /api/workspaces/$id<[0-9a-fA-F]{24}>                                @controllers.api.WorkspacesController.get(id: String)
+POST    /api/workspaces                                                     @controllers.api.WorkspacesController.add()
+PUT     /api/workspaces                                                     @controllers.api.WorkspacesController.update()
+DELETE  /api/workspaces/$id<[0-9a-fA-F]{24}>                                @controllers.api.WorkspacesController.delete(id: String)
+
+# Tiles controller
+GET     /api/tiles/$workspaceId<[0-9a-fA-F]{24}>                            @controllers.api.TilesController.getAll(workspaceId: String)
+GET     /api/tiles/$workspaceId<[0-9a-fA-F]{24}>/$tileId<[0-9a-fA-F]{24}>   @controllers.api.TilesController.get(workspaceId: String, tileId: String)
+POST    /api/tiles                                                          @controllers.api.TilesController.add()
+PUT     /api/tiles                                                          @controllers.api.TilesController.update()
+DELETE  /api/tiles/$workspaceId<[0-9a-fA-F]{24}>/$tileId<[0-9a-fA-F]{24}>   @controllers.api.TilesController.delete(workspaceId: String, tileId: String)
+
+# Sockets controller
+GET     /api/sockets/add                                                    @controllers.api.SocketsController.add()
+
+# Distribution controller
+GET     /api/distribution/start                                             @controllers.api.DistributionController.start()
+GET     /api/distribution/stop                                              @controllers.api.DistributionController.stop()
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /              controllers.Assets.at(path="/public", file="/index.html")
-GET     /*file            controllers.Assets.at(path="/public", file)
-
+GET     /*file                                                               controllers.Assets.at(path="/public", file)
 
