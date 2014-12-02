@@ -57,7 +57,6 @@ uiModule.directive('workspace',function($compile,boxUtils){
                 event.stopPropagation();
                 var boxes = $scope.currWorkspace.boxes;
                 boxUtils.switchBoxes(boxes,boxId,droppedBoxId);
-                console.log("dragBox",boxes);
                 $scope.$emit('updateWorkspace',boxes);
             });
             $scope.$on('expendBox',function(event,borders){
@@ -144,7 +143,6 @@ uiModule.directive('box',function(boxUtils,$timeout){
             }
 
             $scope.onDrop = function($event,droppedBox){
-                console.log("onDrop",$event,droppedBox);
                 var box = $scope.box;
                 if(box.size[0] > 1 || box.size[1] > 1) {
                     alert("לא ניתן להעביר אריחים גדולים");

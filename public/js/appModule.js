@@ -45,7 +45,6 @@ app.controller('controlPanelCtrl',['$scope','workspaceServices','storage','$time
             $scope.currentWorkspace = angular.copy($scope.currentWorkspace);
             $scope.workspaces[$scope.selectedIndex] = $scope.currentWorkspace;
         });
-        console.log($scope.currentWorkspace);
     });
 
 }]);
