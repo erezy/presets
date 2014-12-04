@@ -5,10 +5,22 @@ package data.pub.entities.tiles;
  */
 
 public interface ITile {
-    String getId();
-    void setId(String id);
-    TileType getType();
-    void setType(TileType type);
-    int getPosition();
-    void setPosition(int position);
+    int getId();
+    void setId(int id);
+    int getTypeId();
+    void setTypeId(int type);
+    int[] getFirstLocation();
+    void setFirstLocation(int[] location);
+    int[] getLocation();
+    void setLocation(int[] location);
+    int[] getSize();
+    void setSize(int[] size);
+    int getUnderBox();
+    void setUnderBox(int underBox);
+    boolean isHidden();
+    void setHidden(boolean hidden);
+    boolean getIsSet();
+    void setIsSet(boolean isSet);
+    IFormData getFormData();
+    void setFormData(IFormData formData);
 }

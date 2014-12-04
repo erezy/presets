@@ -4,8 +4,8 @@ var uiModule = angular.module('uiModule',['configModule','ang-drag-drop']);
 uiModule.directive('workspace',function($compile,boxUtils){
     var buildViewWorkspace = function(scope,element){
         var workspace = scope.currWorkspace;
-        if(workspace.boxes) {
-            var boxes = workspace.boxes;
+        if(workspace && workspace.tiles) {
+            var boxes = workspace.tiles;
             var childScope,box;
             for (var i = 0; i < boxes.length; i++) {
                 box = boxes[i];
@@ -13,7 +13,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
                     childScope = scope.$new();
                     childScope.wsData = workspace.data;
                     childScope.box = box;
-                    childScope.templ = boxUtils.getTemplateByTypeId(box.type,false);
+                    childScope.templ = boxUtils.getTemplateByTypeId(box.typeId,false);
                     element.append($compile('<box class="box" />')(childScope));
                 }
             }
@@ -21,8 +21,8 @@ uiModule.directive('workspace',function($compile,boxUtils){
     };
     var buildEditWorkspace = function(scope,element){
         var workspace = scope.currWorkspace;
-        if(workspace.boxes) {
-            var boxes = workspace.boxes;
+        if(workspace.tiles) {
+            var boxes = workspace.tiles;
             var childScope,box;
             for (var i = 0; i < boxes.length; i++) {
                 box = boxes[i];
@@ -55,32 +55,32 @@ uiModule.directive('workspace',function($compile,boxUtils){
             });
             $scope.$on('dragBox',function(event,boxId,droppedBoxId){
                 event.stopPropagation();
-                var boxes = $scope.currWorkspace.boxes;
+                var boxes = $scope.currWorkspace.tiles;
                 boxUtils.switchBoxes(boxes,boxId,droppedBoxId);
-                $scope.$emit('updateWorkspace',boxes);
+                $scope.$emit('updateWorkspace');
             });
             $scope.$on('expendBox',function(event,borders){
                 event.stopPropagation();
-                var boxes = $scope.currWorkspace.boxes;
+                var boxes = $scope.currWorkspace.tiles;
                 var result = boxUtils.getNewBoxArray(boxes,borders,this.chosenId);
                 if(result == null){
                     alert("אזור חופף");
                 }else{
-                    $scope.$emit('updateWorkspace',boxes);
+                    $scope.$emit('updateWorkspace');
                 }
                 this.chosenId = null;
             });
             $scope.$on('deleteBox',function(event,boxId) {
                 event.stopPropagation();
-                var boxes = $scope.currWorkspace.boxes;
+                var boxes = $scope.currWorkspace.tiles;
                 boxUtils.deleteBox(boxes,boxId);
-                $scope.$emit('updateWorkspace',boxes);
+                $scope.$emit('updateWorkspace');
             });
             $scope.$on('collapseBox',function(event,boxId) {
                 event.stopPropagation();
-                var boxes = $scope.currWorkspace.boxes;
+                var boxes = $scope.currWorkspace.tiles;
                 boxUtils.collapseBox(boxes,boxId);
-                $scope.$emit('updateWorkspace',boxes);
+                $scope.$emit('updateWorkspace');
             });
 
         },
@@ -133,7 +133,12 @@ uiModule.directive('box',function(boxUtils,$timeout){
         },
         controller: function ($scope,$timeout,$sce) {
             $scope.getSrc = function(){
-                return $sce.trustAsResourceUrl($scope.box.formData.url);
+                if($scope.box.typeId == 1){
+                    return $sce.trustAsResourceUrl($scope.box.formData.url);
+                }else{
+                    return $sce.trustAsResourceUrl($scope.box.formData.path);
+                }
+
             }
             $scope.collapseBox = function(){
                 $scope.$emit('collapseBox',$scope.box.id);
@@ -164,8 +169,10 @@ uiModule.directive('box',function(boxUtils,$timeout){
                 $scope.templ = "activeBox";
                 box.isSet = true;
                 box.formData = form.data;
-                box.type = form.selectedBoxType;
-
+                box.typeId = form.selectedBoxType;
+                if(box.size[0] == 1 && box.size[1] == 1){
+                  $scope.draggable = true;
+                }
             });
             $scope.$on('theChosenOne', function(event) {
                 event.stopPropagation();
@@ -189,8 +196,8 @@ uiModule.controller('editBoxCtrl',function($scope,boxUtils){
     $scope.$emit('editStart');
 
     var unbind = $scope.$on('initBox',function(event,box){
-        $scope.formTempl = boxUtils.getTemplateByTypeId(box.type,true);
-        $scope.editForm.selectedBoxType = box.type;
+        $scope.formTempl = boxUtils.getTemplateByTypeId(box.typeId,true);
+        $scope.editForm.selectedBoxType = box.typeId;
         $scope.editForm.data = box.formData;
     });
     $scope.$on('$destroy',unbind);

@@ -1,6 +1,7 @@
 package data.prv.entities.tiles;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import data.pub.entities.tiles.IFormData;
 import data.pub.entities.tiles.ITile;
 import data.pub.entities.tiles.TileType;
 import org.bson.types.ObjectId;
@@ -10,55 +11,95 @@ import org.bson.types.ObjectId;
  */
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "_class")
-public abstract class Tile implements ITile {
+public class Tile implements ITile {
 
-    protected ObjectId id;
-    protected TileType type;
-    protected Integer position;
+    protected int id;
+    protected int typeId;
+    protected int[] firstLocation;
+    protected int[] location;
+    protected int[] size;
+    protected int underBox;
+    protected boolean hidden;
+    protected boolean isSet;
+    protected FormData formData;
 
-    public Tile(){
-        this(null, 0);
-        this.position = null;
-    }
-
-    public Tile(String id){
-        this();
-        this.id = new ObjectId(id);
-    }
-
-    public Tile(TileType type, int position){
-        this.id = new ObjectId();
-        this.type = type;
-        this.position = position;
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override
-    public String getId() {
-        return this.id.toString();
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
-    public void setId(String id) {
-        this.id = new ObjectId(id);
+    public int getTypeId() {
+        return typeId;
     }
 
     @Override
-    public TileType getType() {
-        return this.type;
+    public void setTypeId(int type) {
+        this.typeId = type;
     }
 
     @Override
-    public void setType(TileType type) {
-        this.type = type;
+    public int[] getFirstLocation() {
+        return location;
     }
 
     @Override
-    public int getPosition() {
-        return this.position;
+    public void setFirstLocation(int[] location) {
+        this.location = location;
     }
 
     @Override
-    public void setPosition(int position) {
-        this.position = position;
+    public int[] getLocation() {
+        return location;
+    }
+
+    @Override
+    public void setLocation(int[] location) {
+        this.location = location;
+    }
+
+    @Override
+    public int[] getSize() {
+        return size;
+    }
+
+    @Override
+    public void setSize(int[] size) {
+        this.size = size;
+    }
+    public int getUnderBox() {
+        return underBox;
+    }
+
+    public void setUnderBox(int underBox) {
+        this.underBox = underBox;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public boolean getIsSet() {
+        return isSet;
+    }
+
+    public void setIsSet(boolean isSet) {
+        this.isSet = isSet;
+    }
+
+    public IFormData getFormData() {
+        return formData;
+    }
+    public void setFormData(IFormData formData) {
+        this.formData = (FormData)formData;
     }
 }

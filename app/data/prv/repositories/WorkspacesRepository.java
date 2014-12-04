@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import data.prv.context.IPresetsDbContext;
 import data.prv.entities.Workspace;
 import data.pub.entities.IWorkspace;
+import data.pub.entities.tiles.ITile;
 import data.pub.reposotories.IWorkspacesRepository;
 import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
@@ -28,8 +29,7 @@ public class WorkspacesRepository implements IWorkspacesRepository {
     @Override
     public List<IWorkspace> findAll() {
         List<IWorkspace> workspaces = new ArrayList<>();
-        this.collection.find().projection("{_id: 1, _class: 1, name: 1}")
-                .as(Workspace.class).forEach(workspaces::add);
+        this.collection.find().as(Workspace.class).forEach(workspaces::add);
         return workspaces;
     }
 
@@ -46,50 +46,17 @@ public class WorkspacesRepository implements IWorkspacesRepository {
     }
 
     @Override
-    public boolean update(String id, String name, String description, Date expired) {
-        if(name != null && description == null && expired == null){
-            return this.collection.update(new ObjectId(id))
-                    .with("{$set: {name: #}}", name)
-                    .getN() != 0;
-        }
+    public boolean update(String id, String name, String description, Date expired,List<ITile> tiles) {
+        return this.collection.update(new ObjectId(id))
+                .with("{$set: {name: #, description: #, expired: #, tiles: #}}", name, description, expired, tiles)
+                .getN() != 0;
+    }
 
-        if(name != null && description != null && expired == null){
-            return this.collection.update(new ObjectId(id))
-                    .with("{$set: {name: #, description: #}}", name, description)
-                    .getN() != 0;
-        }
-
-        if(name != null && description == null){
-            return this.collection.update(new ObjectId(id))
-                    .with("{$set: {name: #, expired: #}}", name, expired)
-                    .getN() != 0;
-        }
-
-        if(name != null){
-            return this.collection.update(new ObjectId(id))
-                    .with("{$set: {name: #, description: #, expired: #}}", name, description, expired)
-                    .getN() != 0;
-        }
-
-        if(description != null && expired == null){
-            return this.collection.update(new ObjectId(id))
-                    .with("{$set: {description: #}}", description)
-                    .getN() != 0;
-        }
-
-        if(description != null){
-            return this.collection.update(new ObjectId(id))
-                    .with("{$set: {description: #, expired: #}}", description, expired)
-                    .getN() != 0;
-        }
-
-        if(expired != null){
-            return this.collection.update(new ObjectId(id))
-                    .with("{$set: {expired: #}}", expired)
-                    .getN() != 0;
-        }
-
-        return false;
+    @Override
+    public boolean addTiles(String id,List<ITile> tiles) {
+        return this.collection.update(new ObjectId(id))
+                .with("{$set: {tiles: #}}", tiles)
+                .getN() != 0;
     }
 
     @Override

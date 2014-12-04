@@ -1,5 +1,6 @@
 package data.prv.entities.tiles;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import data.pub.entities.tiles.IWebPage;
 import data.pub.entities.tiles.TileType;
 
@@ -7,20 +8,13 @@ import data.pub.entities.tiles.TileType;
  * Created by tzachit on 19/11/14.
  */
 
-public class WebPage extends Tile implements IWebPage {
+public class WebPage extends FormData implements IWebPage {
 
     private String url;
 
-    public WebPage(){
-        this(0);
-    }
+    public WebPage(){}
 
-    public WebPage(int position){
-        this(null, position);
-    }
-
-    public WebPage(String url, int position) {
-        super(TileType.WebPage, position);
+    public WebPage(String url) {
         this.url = url;
     }
 

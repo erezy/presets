@@ -1,5 +1,6 @@
 package data.prv.entities.tiles;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import data.pub.entities.tiles.IFile;
 import data.pub.entities.tiles.TileType;
 
@@ -8,20 +9,13 @@ import data.pub.entities.tiles.TileType;
  * Created by tzachit on 19/11/14.
  */
 
-public class File extends Tile implements IFile {
+public class File extends FormData implements IFile {
 
     private String path;
 
-    public File(){
-        this(0);
-    }
+    public File(){}
 
-    public File(int position){
-        this(null, position);
-    }
-
-    public File(String path, int position) {
-        super(TileType.File, position);
+    public File(String path) {
         this.path = path;
     }
 

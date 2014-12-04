@@ -1,9 +1,9 @@
 var configModule = angular.module('configModule',['ngAnimate', 'mgcrea.ngStrap']);
 configModule.constant('WORKSPACE_SIZE', { row:4,col:5,size:20 } );
-configModule.constant('BOX_TYPES',  [{id:'1', name:'דף אינטרנט',form:"url",html:"types/iframe"},
-                                    {id:'2', name:'קובץ',form:"url",html:"types/iframe"},
-                                    {id:'3', name:'מצב עבודה',form:"",html:"types/workspaceStatus"},
-                                    {id:'4', name:'מפה',form:"",html:"types/map"}]
+configModule.constant('BOX_TYPES',  [{id:1, name:'דף אינטרנט',form:"url",html:"types/iframe"},
+                                    {id:2, name:'קובץ',form:"file",html:"types/iframe"},
+                                    {id:3, name:'מצב עבודה',form:"",html:"types/workspaceStatus"},
+                                    {id:4, name:'מפה',form:"",html:"types/map"}]
                         );
 configModule.filter('boxType',function(BOX_TYPES){
     return function(typeId){
@@ -119,7 +119,7 @@ configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
         this.collapseBox(boxes,boxId);
         var box = boxes[boxId];
         delete box.url;
-        delete box.type;
+        delete box.typeId;
         delete box.isSet;
     };
     this.collapseBox = function(boxes,boxId){
@@ -152,17 +152,4 @@ configModule.config(function($modalProvider) {
     });
 })
 
-configModule.factory('storage',function(){
-    setObject = function(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
-    };
 
-    getObject = function(key) {
-        var value = localStorage.getItem(key);
-        return value && JSON.parse(value);
-    };
-    return{
-        setObj: setObject,
-        getObj: getObject
-    }
-});

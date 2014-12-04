@@ -18,11 +18,11 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.PUBLIC_
 public class PresetsDbContext implements IPresetsDbContext {
 
     private Jongo jongo;
+    private MongoClient mongoClient;
 
     public PresetsDbContext() throws UnknownHostException {
-
-        DB db = new MongoClient().getDB("presets");
-
+        mongoClient = new MongoClient();
+        DB db = mongoClient.getDB("presets");
         this.jongo = new Jongo(db,
                 new JacksonMapper.Builder()
                         .registerModule(new JodaModule())
@@ -37,4 +37,5 @@ public class PresetsDbContext implements IPresetsDbContext {
     public MongoCollection getCollection(String name){
         return this.jongo.getCollection(name);
     }
+
 }

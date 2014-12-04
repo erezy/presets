@@ -65,7 +65,7 @@ public class TilesController extends Controller {
             AddTileIModel addModel = model.get();
 
             String tileId = null;
-
+/*
             switch (addModel.getType()){
                 case "File": {
                     tileId = this.tilesRepo.addFile(
@@ -92,7 +92,7 @@ public class TilesController extends Controller {
                     break;
                 }
             }
-
+*/
             if(tileId == null){
                 return badRequest(Json.toJson(new String[]{"Server error!", "Can't add!"}));
             }

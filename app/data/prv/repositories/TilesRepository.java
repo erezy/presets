@@ -56,7 +56,7 @@ public class TilesRepository implements ITilesRepository {
         workspace.getTiles().forEach(tiles::add);
         return tiles;
     }
-
+/*
     @Override
     public String addFile(String workspaceId, String path, int position) {
 
@@ -126,7 +126,7 @@ public class TilesRepository implements ITilesRepository {
                 .with("{$push: {tiles: #}}",  map)
                 .getN() != 0 ? map.getId() : null;
     }
-
+*/
     @Override
     public boolean updateFile(String workspaceId, String tileId, String path, Integer position) {
 

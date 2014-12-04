@@ -1,7 +1,11 @@
 var app = angular.module('presets',['uiModule','serverModule']);
-app.controller('controlPanelCtrl',['$scope','workspaceServices','storage','$timeout',function($scope,workspaceServices,storage,$timeout){
-    $scope.workspaces = workspaceServices.getAllWorkspaces();
-    $scope.currentWorkspace = workspaceServices.getLastWorkspace($scope.workspaces);
+app.controller('controlPanelCtrl',['$scope','workspaceServices','$timeout',function($scope,workspaceServices,$timeout){
+    this.setWorkspaces = function(data){
+       $scope.workspaces = data;
+       $scope.currentWorkspace = workspaceServices.getLastWorkspace($scope.workspaces);
+    };
+    workspaceServices.getAllWorkspaces(this.setWorkspaces);
+
     $scope.lastWorkspace = {};
     $scope.isEdit = false;
     $scope.isNew = false;
@@ -17,13 +21,19 @@ app.controller('controlPanelCtrl',['$scope','workspaceServices','storage','$time
         $scope.currentWorkspace = workspaceServices.getNewWorkspace();
         $scope.isNew = true;
     };
-    $scope.saveWorkspace = function (){
+    var setEditView = function(){
+            $scope.isEdit = false;
+    };
+    var setEditViewAndPush = function(){
         $scope.isEdit = false;
-        storage.setObj('lastWorkspaceObject',$scope.currentWorkspace);
-        storage.setObj('lastWorkspaces',$scope.workspaces);
+        $scope.workspaces.push($scope.currentWorkspace);
+    };
+    $scope.saveWorkspace = function (){
         if($scope.isNew) {
-            $scope.workspaces.push($scope.currentWorkspace);
+            workspaceServices.addWorkspace(setEditViewAndPush,$scope.currentWorkspace,$scope.workspaces);
             $scope.isNew = false;
+        }else{
+            workspaceServices.updateWorkspace(setEditView,$scope.currentWorkspace);
         }
     };
     $scope.removeWorkspace = function (){
@@ -37,9 +47,9 @@ app.controller('controlPanelCtrl',['$scope','workspaceServices','storage','$time
     };
     $scope.changeWorkspace = function(){
         console.log("change");
-        storage.setObj('lastWorkspaceObject',$scope.currentWorkspace);
+        workspaceServices.changeWorkspace($scope.currentWorkspace);
     }
-    $scope.$on('updateWorkspace',function(event,boxes){
+    $scope.$on('updateWorkspace',function(event){
         event.stopPropagation();
         $timeout(function(){
             $scope.currentWorkspace = angular.copy($scope.currentWorkspace);

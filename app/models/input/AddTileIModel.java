@@ -7,14 +7,13 @@ import play.data.validation.Constraints.*;
  */
 public class AddTileIModel {
 
-    @Required
+
     @Pattern("[0-9a-fA-F]{24}")
     private String workspaceId;
 
-    @Required
     private int position;
 
-    @Required
+
     @Pattern("(File)|(WebPage)|(WorkspaceDescriptor)|(Map)")
     private String type;
 
@@ -29,6 +28,7 @@ public class AddTileIModel {
     @MinLength(2)
     @MaxLength(16)
     private String name;
+
 
     public String getWorkspaceId() {
         return workspaceId;
