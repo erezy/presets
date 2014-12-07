@@ -125,9 +125,11 @@ uiModule.directive('box',function(boxUtils,$timeout){
                "left":left+"px"
            };
            element.css(styles);
+           scope.dropChannel = "active";
            if(box.size[0] > 1 || box.size[1] > 1){
                scope.resize = true;
                scope.draggable = false;
+               scope.dropChannel = "notActive";
            }
 
         },
@@ -148,12 +150,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
             }
 
             $scope.onDrop = function($event,droppedBox){
-                var box = $scope.box;
-                if(box.size[0] > 1 || box.size[1] > 1) {
-                    alert("לא ניתן להעביר אריחים גדולים");
-                    return false;
-                }
-                $scope.$emit('dragBox',box.id,droppedBox.id);
+                $scope.$emit('dragBox',$scope.box.id,droppedBox.id);
             };
 
             $scope.$on('editStart', function(event) {

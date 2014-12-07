@@ -37,14 +37,18 @@
 .active-box {
     background-color: #99b;
     text-align: right;
-    padding: 15px;
     font-size: 1.5em;
     color: #fff;
+    padding: 1px;
 }
-.active-box > .info{
-    height: 80%;
+.active-box > .content{
+    padding: 10px;
+    height: inherit;
 }
-.active-box > .options{
+.active-box > .content > .info{
+    height: 60%;
+}
+.active-box > .content > .options{
     float: left;
 }
 .add-icon{
@@ -148,11 +152,24 @@
 .dragButton{
     height: 20px;
     width: 100%;
-    border-radius: 0.5em;
+    border-radius: 0.2em;
     border: solid 0.5px;
-    box-shadow: 0px 3px 5px #333;
+    box-shadow: 0px 1px 1px #333;
+    background: linear-gradient(0deg, #99b, #fff);
+    cursor: -webkit-grab;
+}
+.press{
+    cursor: -webkit-grabbing;
+    background: linear-gradient(0deg, #fff, #99b);
 }
 .btn-shadow{
     box-shadow: 0px 0px 5px #555;
     margin: 0px 2px;
 }
+
+.on-drag-hover {
+   border: solid 5px ivory;
+   border-radius: 0.2em;
+   box-shadow: -5px -5px 20px #99b;
+}
+
