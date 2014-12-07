@@ -24,8 +24,11 @@ app.controller('controlPanelCtrl',['$scope','workspaceServices','$timeout',funct
     var setEditView = function(){
             $scope.isEdit = false;
     };
-    var setEditViewAndPush = function(){
+    var setEditViewAndPush = function(data){
         $scope.isEdit = false;
+        if(data){
+            $scope.currentWorkspace.id = data.id;
+        }
         $scope.workspaces.push($scope.currentWorkspace);
     };
     $scope.saveWorkspace = function (){
