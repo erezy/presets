@@ -30,13 +30,7 @@ public class WorkspacesRepository implements IWorkspacesRepository {
     public List<IWorkspace> findAll() {
         List<IWorkspace> workspaces = new ArrayList<>();
         Date today = new Date();
-        this.collection.find().as(Workspace.class).forEach(x -> {
-            if(x.getExpired().before(today)){
-                remove(x.getId());
-            }else {
-                workspaces.add(x);
-            }
-        });
+        this.collection.find().as(Workspace.class).forEach(workspaces::add);
         return workspaces;
     }
 
