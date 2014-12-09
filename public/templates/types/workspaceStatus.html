@@ -5,6 +5,8 @@
         <dd>{{currWorkspace.name}}</dd>
         <dt>תאור</dt>
         <dd>{{currWorkspace.description}}</dd>
+        <dt>תאריך עדכון אחרון</dt>
+        <dd>{{currWorkspace.modified | date: 'dd/MM/yyyy H:mm:ss'}}</dd>
         <dt>מועד פקיעת תוקף</dt>
         <dd>{{currWorkspace.expired | date: 'dd/MM/yyyy'}}</dd>
     </dl>

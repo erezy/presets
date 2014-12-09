@@ -49,7 +49,7 @@ public class WorkspacesRepository implements IWorkspacesRepository {
     @Override
     public boolean update(String id, String name, String description, Date expired,List<ITile> tiles) {
         return this.collection.update(new ObjectId(id))
-                .with("{$set: {name: #, description: #, expired: #, tiles: #}}", name, description, expired, tiles)
+                .with("{$set: {name: #, description: #,modified: #, expired: #, tiles: #}}", name, description, new Date(), expired, tiles)
                 .getN() != 0;
     }
 

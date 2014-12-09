@@ -165,7 +165,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
     }
 });
 
-uiModule.controller('editBoxCtrl',function($scope,boxUtils){
+uiModule.controller('EditBoxController',function($scope,boxUtils){
     $scope.boxTypes = boxUtils.getBoxTypes();
    $scope.title = "חלון עבודה" ;
     $scope.$watch("formTempl",function(templ){

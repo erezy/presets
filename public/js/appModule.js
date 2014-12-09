@@ -1,5 +1,5 @@
 var app = angular.module('presets',['uiModule','serverModule']);
-app.controller('controlPanelCtrl',['$scope','workspaceServices','$timeout',function($scope,workspaceServices,$timeout){
+app.controller('ControlPanelController',['$scope','workspaceServices','$timeout',function($scope,workspaceServices,$timeout){
     this.setWorkspaces = function(data){
        $scope.workspaces = data;
        $scope.currentWorkspace = workspaceServices.getLastWorkspace($scope.workspaces);
@@ -28,10 +28,12 @@ app.controller('controlPanelCtrl',['$scope','workspaceServices','$timeout',funct
         $scope.isEdit = false;
         if(data){
             $scope.currentWorkspace.id = data.id;
+            workspaceServices.changeWorkspace($scope.currentWorkspace);
         }
         $scope.workspaces.push($scope.currentWorkspace);
     };
     $scope.saveWorkspace = function (){
+        $scope.currentWorkspace.modified = new Date();
         if($scope.isNew) {
             workspaceServices.addWorkspace(setEditViewAndPush,$scope.currentWorkspace,$scope.workspaces);
             $scope.isNew = false;
