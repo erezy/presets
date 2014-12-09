@@ -78,8 +78,14 @@ serverModule.factory('workspaceServices',function(boxProvider,WORKSPACE_SIZE,sto
                var ws;
                for (var i = 0; i < workspaces.length;i++){
                    ws = workspaces[i];
-                   if(ws.name == currentWorkspace.name){
-                       return ws;
+                   if(fromServer){
+                        if(ws.id == currentWorkspace.id){
+                            return ws;
+                        }
+                   }else{
+                        if(ws.name == currentWorkspace.name){
+                            return ws;
+                        }
                    }
                }
                return workspaces[0];
