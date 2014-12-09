@@ -1,15 +1,15 @@
 <div class="active-box" >
     <div class="dragButton" ng-show="draggable" ng-class="{press: isPress}" ng-mousedown="isPress = true" ng-mouseup="isPress = false"></div>
     <div class="content">
-        <div class="info">
+        <div class="info" >
             <p>{{box.typeId | boxType}}</p>
         </div>
         <div class="options">
-            <button class="btn btn-danger btn-shadow glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteBox()"></button>
-            <button class="btn btn-warning btn-shadow glyphicon glyphicon-pencil" aria-hidden="true"
-                  bs-modal="modal" data-template="templates/editBox.html"></button>
-            <div class="btn btn-primary btn-shadow glyphicon glyphicon-fullscreen" aria-hidden="true" ><div expended class="expendable"></div></div>
-            <button class="btn btn-info btn-shadow glyphicon glyphicon-resize-small" aria-hidden="true" ng-click="collapseBox()" ng-show="resize"></button>
+            <div class="glyphicon-btn glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteBox(box.id)"></div>
+            <div class="glyphicon-btn glyphicon glyphicon-pencil" aria-hidden="true"
+                  bs-modal="modal" data-template="templates/editBox.html"></div>
+            <div class="glyphicon-btn glyphicon glyphicon-fullscreen" aria-hidden="true" ><div expended class="expendable"></div></div>
+            <div class="glyphicon-btn glyphicon glyphicon-resize-small" aria-hidden="true" ng-click="collapseBox(box.id)" ng-show="resize"></div>
         </div>
     </div>
 </div>

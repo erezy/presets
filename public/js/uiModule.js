@@ -11,7 +11,6 @@ uiModule.directive('workspace',function($compile,boxUtils){
                 box = boxes[i];
                 if(box.isSet) {
                     childScope = scope.$new();
-                    childScope.wsData = workspace.data;
                     childScope.box = box;
                     childScope.templ = boxUtils.getTemplateByTypeId(box.typeId,false);
                     element.append($compile('<box class="box" />')(childScope));
@@ -70,23 +69,20 @@ uiModule.directive('workspace',function($compile,boxUtils){
                 }
                 this.chosenId = null;
             });
-            $scope.$on('deleteBox',function(event,boxId) {
-                event.stopPropagation();
-                var boxes = $scope.currWorkspace.tiles;
-                boxUtils.deleteBox(boxes,boxId);
-                $scope.$emit('updateWorkspace');
-            });
-            $scope.$on('collapseBox',function(event,boxId) {
-                event.stopPropagation();
+            $scope.collapseBox = function(boxId){
                 var boxes = $scope.currWorkspace.tiles;
                 boxUtils.collapseBox(boxes,boxId);
                 $scope.$emit('updateWorkspace');
-            });
+            };
+            $scope.deleteBox = function(boxId){
+               var boxes = $scope.currWorkspace.tiles;
+               boxUtils.deleteBox(boxes,boxId);
+               $scope.$emit('updateWorkspace');
+            };
 
         },
         link: function link(scope,element, attrs) {
             scope.$watchGroup(['currWorkspace','isEdit'],function() {
-                console.log("link",scope.isEdit);
                 element.html("");
                 if(scope.isEdit == "true"){
                     buildEditWorkspace(scope,element);
@@ -142,14 +138,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
                 }
 
             }
-            $scope.collapseBox = function(){
-                $scope.$emit('collapseBox',$scope.box.id);
-            }
-            $scope.deleteBox = function(){
-                $scope.$emit('deleteBox',$scope.box.id);
-            }
-
-            $scope.onDrop = function($event,droppedBox){
+           $scope.onDrop = function($event,droppedBox){
                 $scope.$emit('dragBox',$scope.box.id,droppedBox.id);
             };
 
@@ -170,11 +159,6 @@ uiModule.directive('box',function(boxUtils,$timeout){
                 if(box.size[0] == 1 && box.size[1] == 1){
                   $scope.draggable = true;
                 }
-            });
-            $scope.$on('theChosenOne', function(event) {
-                event.stopPropagation();
-                var box = $scope.box;
-                $scope.$emit('setTheChosenOne',box.id);
             });
         },
         templateUrl: 'templates/box.html'
@@ -226,7 +210,7 @@ uiModule.directive('expended', ['$document', function($document) {
                     startX = event.pageX;
                     startY = event.pageY;
                     element.css({
-                        backgroundColor: 'rgba(0,0,0,.5)',
+                        backgroundColor: 'rgba(100,150,200,.5)',
                         margin:'0px',
                         width: '1px',
                         height: '1px',
@@ -234,12 +218,14 @@ uiModule.directive('expended', ['$document', function($document) {
                         top: startY+'px',
                         left: startX+'px'
                     });
+                    angular.element($document[0].body).removeClass("nohover");
                     $document.on('mousemove', mousemove);
                     $document.on('mouseup', mouseup);
-                    scope.$emit('theChosenOne');
+                    scope.$emit('setTheChosenOne',scope.box.id);
                 });
 
                 function mousemove(event) {
+                event.preventDefault();
                     y = event.pageY - startY;
                     x = event.pageX - startX;
                     if(y > 0){
@@ -278,13 +264,14 @@ uiModule.directive('expended', ['$document', function($document) {
                                 height: '100%',
                                 backgroundColor: 'rgba(0,0,0,0)',
                                 position: 'absolute',
-                                marginTop: '-26px',
+                                marginTop: '-30px',
                                 marginLeft: '-12px',
                                 top: 'initial',
                                 left: 'initial',
                                 zIndex:'1000'
                             };
                     element.css(styles);
+                    angular.element($document[0].body).addClass("nohover");
                 }
             }
     }]);

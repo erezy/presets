@@ -45,12 +45,12 @@ public class Tile implements ITile {
 
     @Override
     public int[] getFirstLocation() {
-        return location;
+        return firstLocation;
     }
 
     @Override
     public void setFirstLocation(int[] location) {
-        this.location = location;
+        this.firstLocation = location;
     }
 
     @Override

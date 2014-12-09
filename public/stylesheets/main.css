@@ -11,18 +11,13 @@
     margin-right: -30px;
 }
 .controlPanel{
-    background-color: #eee;
+    background: linear-gradient(#eee ,#88b);
     border: solid 1px #ccc;
-    border-radius: 6px;
     padding: 5px 5px;
 }
 .workspace{
     position: absolute;
     margin-top: 2px;
-}
-
-.inactive-box{
-    background-color: #ccd;
 }
 
 .box{
@@ -35,7 +30,7 @@
     border-radius: 0.2em;
 }
 .active-box {
-    background-color: #99b;
+    background-color: #88b;
     text-align: right;
     font-size: 1.5em;
     color: #fff;
@@ -46,17 +41,34 @@
     height: inherit;
 }
 .active-box > .content > .info{
-    height: 60%;
+    display:inline-block;
+    float:right;
 }
 .active-box > .content > .options{
     float: left;
+    display:inline-block;
 }
+.inactive-box{
+    background: linear-gradient(135deg, #eee,#ccd );
+}
+.inactive-box:hover, .on-drag-hover > .inactive-box{
+    background: linear-gradient(315deg, #eee,#ccd );
+}
+
 .add-icon{
     font-size: 4em;
     top: 40%;
     left: 42%;
     cursor: pointer;
+    color: #ccd;
 }
+.inactive-box:hover > .add-icon{
+    font-size:4.5em;
+    top: 38%;
+    left: 40%;
+    color: #88b;
+}
+
 .modal  {
     position: fixed;
     top: 40%;
@@ -116,12 +128,12 @@
     height: 100%;
     background-color: rgba(0,0,0,0);
     position: absolute;
-    margin-top: -26px;
+    margin-top: -30px;
     margin-left: -12px;
     z-index: 1000;
 }
 .wsStatus{
-    background-color: beige;
+    background: linear-gradient(0deg, #ddd, #ccd);
     width: 100%;
     height: 100%;
     text-align: right;
@@ -131,7 +143,6 @@
 .wsStatus > p{
     text-decoration: underline;
     font-size: 1.5em;
-    color: brown;
 }
 .wsStatus > dl > dt{
      float: right;
@@ -162,14 +173,31 @@
     cursor: -webkit-grabbing;
     background: linear-gradient(0deg, #fff, #99b);
 }
-.btn-shadow{
+.btn-shadow, body.nohover .glyphicon-btn:hover{
     box-shadow: 0px 0px 5px #555;
     margin: 0px 2px;
 }
-
-.on-drag-hover {
-   border: solid 5px ivory;
-   border-radius: 0.2em;
-   box-shadow: -5px -5px 20px #99b;
+body.nohover .glyphicon-btn:hover{
+    background-color:#fff;
+    color:#88b;
 }
+.glyphicon-btn{
+    display: block;
+    padding:6px 12px;
+    border-radius: 0.2em;
+    border: solid 1px #88b;
+}
+.on-drag-hover {
+    border: solid 5px #88b;
+    border-radius: 0.2em;
+    box-shadow: -5px -5px 20px #99b;
+}
+body.nohover .active-box:hover{
+    box-shadow: -5px -5px 20px #99b;
+    font-size:1.8em;
+}
+body.nohover .active-box:hover > .dragButton{
+    height:25px;
+}
+
 
