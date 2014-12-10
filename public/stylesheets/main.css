@@ -1,23 +1,19 @@
-
-.workspace-form{
-    direction: rtl;
-    margin-right: 20px;
-}
-
-.long-input{
-    width: 400px !important;
-}
-.in-input{
-    margin-right: -30px;
-}
 .controlPanel{
-    background: linear-gradient(#eee ,#88b);
-    border: solid 1px #ccc;
     padding: 5px 5px;
 }
 .workspace{
     position: absolute;
     margin-top: 2px;
+}
+.workspace-form{
+    direction: rtl;
+    margin-right: 20px;
+}
+.long-input{
+    width: 400px !important;
+}
+.in-input{
+    margin-right: -30px;
 }
 
 .box{
@@ -30,11 +26,20 @@
     border-radius: 0.2em;
 }
 
+.add-icon{
+    font-size: 4em;
+    top: 40%;
+    left: 42%;
+    cursor: pointer;
+}
+.inactive-box:hover > .add-icon{
+    font-size:4.5em;
+    top: 38%;
+    left: 40%;
+}
 .active-box {
-    background-color: #88b;
     text-align: right;
     font-size: 1.5em;
-    color: #fff;
     padding: 1px;
 }
 .active-box > .content{
@@ -49,27 +54,6 @@
     float: left;
     display:inline-block;
 }
-.inactive-box{
-    background: linear-gradient(135deg, #eee,#ccd );
-}
-.inactive-box:hover, .on-drag-hover > .inactive-box{
-    background: linear-gradient(315deg, #eee,#ccd );
-}
-
-.add-icon{
-    font-size: 4em;
-    top: 40%;
-    left: 42%;
-    cursor: pointer;
-    color: #ccd;
-}
-.inactive-box:hover > .add-icon{
-    font-size:4.5em;
-    top: 38%;
-    left: 40%;
-    color: #88b;
-}
-
 .modal  {
     position: fixed;
     top: 40%;
@@ -79,9 +63,6 @@
 
   -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
-}
-.modal-title{
-    color: #000000;
 }
 .modal-dialog{
     position: inherit;
@@ -102,8 +83,6 @@
 .modal-footer {
     text-align:left;
 }
-
-
 .left-close{
     float: left;
 }
@@ -112,29 +91,17 @@
     line-height: 34px;
     opacity: 1;
 }
-
-
 .animate-show.ng-hide-add.ng-hide-add-active,
 .animate-show.ng-hide-remove.ng-hide-remove-active {
     -webkit-transition: all linear 0.3s;
     transition: all linear 0.3s;
 }
-
 .animate-show.ng-hide {
     line-height: 0;
     opacity: 0;
 }
-.expendable {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0);
-    position: absolute;
-    margin-top: -30px;
-    margin-left: -12px;
-    z-index: 1000;
-}
+
 .wsStatus{
-    background: linear-gradient(0deg, #ddd, #ccd);
     width: 100%;
     height: 100%;
     text-align: right;
@@ -161,48 +128,44 @@
 #cesiumContainer {
     width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
 }
+
+.expendable {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0);
+    position: absolute;
+    margin-top: -30px;
+    margin-left: -12px;
+    z-index: 1000;
+}
 .dragButton{
     height: 20px;
     width: 100%;
     border-radius: 0.2em;
     border: solid 0.5px;
-    box-shadow: 0px 1px 1px #333;
-    background: linear-gradient(0deg, #99b, #fff);
     cursor: -webkit-grab;
 }
 .press{
     cursor: -webkit-grabbing;
-    background: linear-gradient(0deg, #fff, #99b);
-}
-.btn-shadow, body.nohover .glyphicon-btn:hover{
-    box-shadow: 0px 0px 5px #555;
-    margin: 0px 2px;
 }
 
 .glyphicon-btn{
     padding:6px 12px;
 }
-body.nohover .glyphicon-btn:hover{
-    background-color:#fff;
-    color:#88b;
-    border-radius: 0.2em;
-    border: solid 1px #88b;
+
+.nohover .glyphicon-btn:hover,.btn-shadow{
+    margin: 0px 2px;
 }
-.on-drag-hover {
-    border: solid 5px #88b;
+
+.nohover .glyphicon-btn:hover,.on-drag-hover{
     border-radius: 0.2em;
-    box-shadow: -5px -5px 20px #99b;
 }
-body.nohover .active-box:hover{
-    box-shadow: -5px -5px 20px #99b;
+.nohover .active-box:hover{
     font-size:1.8em;
 }
-body.nohover .active-box:hover > .dragButton{
+.nohover .active-box:hover > .dragButton{
     height:25px;
 }
-body.nohover .box:hover{
+.nohover .box:hover{
     z-index:100;
 }
-
-
-

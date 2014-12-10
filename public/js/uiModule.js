@@ -152,7 +152,6 @@ uiModule.directive('box',function(boxUtils,$timeout){
            scope.$on('$destroy',function(){
                 var mapView = scope.maps[scope.box.id];
                 if(mapView && !mapView.isDestroyed()){
-                    console.log(scope.maps[scope.box.id]);
                     scope.maps[scope.box.id].destroy();
                     scope.maps[scope.box.id] = null;
                 }
@@ -259,7 +258,7 @@ uiModule.directive('expended', ['$document', function($document) {
                         top: startY+'px',
                         left: startX+'px'
                     });
-                    angular.element($document[0].body).removeClass("nohover");
+                    angular.element(document.querySelector( 'workspace' )).removeClass("nohover");
                     $document.on('mousemove', mousemove);
                     $document.on('mouseup', mouseup);
                     scope.$emit('setTheChosenOne',scope.box.id);
@@ -312,7 +311,7 @@ uiModule.directive('expended', ['$document', function($document) {
                                 zIndex:'1000'
                             };
                     element.css(styles);
-                    angular.element($document[0].body).addClass("nohover");
+                    angular.element(document.querySelector( 'workspace' )).addClass("nohover");
                 }
             }
     }]);
