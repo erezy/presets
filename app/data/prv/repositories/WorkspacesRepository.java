@@ -40,16 +40,16 @@ public class WorkspacesRepository implements IWorkspacesRepository {
     }
 
     @Override
-    public String add(String name, String description, Date expired) {
-        Workspace workspace = new Workspace(name, description, new Date(), expired);
+    public String add(String name, String description, Date expired, int cols, int rows) {
+        Workspace workspace = new Workspace(name, description, new Date(), expired, cols, rows);
         this.collection.save(workspace);
         return workspace.getId();
     }
 
     @Override
-    public boolean update(String id, String name, String description, Date expired,List<ITile> tiles) {
+    public boolean update(String id, String name, String description, Date expired, int cols, int rows,List<ITile> tiles) {
         return this.collection.update(new ObjectId(id))
-                .with("{$set: {name: #, description: #,modified: #, expired: #, tiles: #}}", name, description, new Date(), expired, tiles)
+                .with("{$set: {name: #, description: #,modified: #, expired: #, cols: #, rows: #, tiles: #}}", name, description, new Date(), expired, cols, rows, tiles)
                 .getN() != 0;
     }
 

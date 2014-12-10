@@ -21,6 +21,8 @@ public class Workspace extends Entity implements IWorkspace {
     private String description;
     private Date modified;
     private Date expired;
+    private int cols;
+    private int rows;
     private List<Tile> tiles;
 
     public Workspace(){
@@ -36,22 +38,24 @@ public class Workspace extends Entity implements IWorkspace {
     }
 
     public Workspace(String name, String description, Date modified){
-        this(name, description, modified, new Date());
+        this(name, description, modified, new Date(),0,0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, 14);
         this.expired = calendar.getTime();
     }
 
-    public Workspace(String name, String description, Date modified, Date expired){
-        this(name, description, modified, expired, new ArrayList<>());
+    public Workspace(String name, String description, Date modified, Date expired, int cols, int rows){
+        this(name, description, modified, expired, cols, rows, new ArrayList<>());
     }
 
-    public Workspace(String name, String description, Date modified, Date expired, List<ITile> tiles){
+    public Workspace(String name, String description, Date modified, Date expired, int cols, int rows, List<ITile> tiles){
         this.name = name;
         this.description = description;
         this.modified = modified;
         this.expired = expired;
+        this.cols = cols;
+        this.rows = rows;
         this.tiles = new ArrayList<>();
 
         if(tiles != null && tiles.size() != 0){
@@ -97,6 +101,25 @@ public class Workspace extends Entity implements IWorkspace {
     @Override
     public void setExpired(Date expired) {
         this.expired = expired;
+    }
+    @Override
+    public int getCols() {
+        return cols;
+    }
+
+    @Override
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
+
+    @Override
+    public int getRows() {
+        return rows;
+    }
+
+    @Override
+    public void setRows(int rows) {
+        this.rows = rows;
     }
 
     @Override

@@ -28,7 +28,7 @@ serverModule.service('server',function($http){
 
 });
 
-serverModule.factory('boxProvider',function(WORKSPACE_SIZE){
+serverModule.factory('boxProvider',function(){
     function box(row,col,num){
         this.firstLocation = [row,col];
         this.location = [row,col];
@@ -36,9 +36,9 @@ serverModule.factory('boxProvider',function(WORKSPACE_SIZE){
         this.id = num;
     }
     return{
-        getNewBox: function(num){
-            var row = Math.floor(num/WORKSPACE_SIZE.col);
-            var col = num%WORKSPACE_SIZE.col;
+        getNewBox: function(num,numOfCols){
+            var row = Math.floor(num/numOfCols);
+            var col = num%numOfCols;
             return new box(row,col,num);
         }
     }
@@ -55,15 +55,26 @@ serverModule.factory('workspaceServices',function(boxProvider,WORKSPACE_SIZE,sto
        getNewWorkspace: function(){
             function workspace(){
                this.tiles = [];
+               this.rows = WORKSPACE_SIZE.row;
+               this.cols = WORKSPACE_SIZE.col;
                this.expired = new Date((new Date()).getTime() + 24*60*60*1000);
             }
             var newWorkspace = new  workspace();
             var boxes = [];
-            for(var i=0; i<WORKSPACE_SIZE.size;i++){
-               boxes.push(boxProvider.getNewBox(i));
+            var size = WORKSPACE_SIZE.row * WORKSPACE_SIZE.col;
+            for(var i=0; i<size;i++){
+               boxes.push(boxProvider.getNewBox(i,newWorkspace.cols));
             }
             newWorkspace.tiles = boxes;
             return newWorkspace;
+       },
+       changeWorkspaceSize: function(workspace){
+            var size = workspace.rows * workspace.cols;
+             var boxes = [];
+            for(var i=0; i< size;i++){
+               boxes.push(boxProvider.getNewBox(i,workspace.cols));
+            }
+            workspace.tiles = boxes;
        },
        getAllWorkspaces: function(callback){
             if(fromServer){

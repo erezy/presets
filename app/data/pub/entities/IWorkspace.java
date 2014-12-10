@@ -18,5 +18,9 @@ public interface IWorkspace {
     void setModified(Date modified);
     Date getExpired();
     void setExpired(Date expired);
+    int getCols();
+    void setCols(int cols);
+    int getRows();
+    void setRows(int rows);
     List<ITile> getTiles();
 }

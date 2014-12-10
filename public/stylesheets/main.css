@@ -29,6 +29,7 @@
     height: 100%;
     border-radius: 0.2em;
 }
+
 .active-box {
     background-color: #88b;
     text-align: right;
@@ -38,7 +39,7 @@
 }
 .active-box > .content{
     padding: 10px;
-    height: inherit;
+    height: 90%;
 }
 .active-box > .content > .info{
     display:inline-block;
@@ -177,13 +178,13 @@
     box-shadow: 0px 0px 5px #555;
     margin: 0px 2px;
 }
+
+.glyphicon-btn{
+    padding:6px 12px;
+}
 body.nohover .glyphicon-btn:hover{
     background-color:#fff;
     color:#88b;
-}
-.glyphicon-btn{
-    display: block;
-    padding:6px 12px;
     border-radius: 0.2em;
     border: solid 1px #88b;
 }
@@ -199,5 +200,9 @@ body.nohover .active-box:hover{
 body.nohover .active-box:hover > .dragButton{
     height:25px;
 }
+body.nohover .box:hover{
+    z-index:100;
+}
+
 
 

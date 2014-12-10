@@ -1,5 +1,5 @@
 var app = angular.module('presets',['uiModule','serverModule']);
-app.controller('ControlPanelController',['$scope','workspaceServices','$timeout',function($scope,workspaceServices,$timeout){
+app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','workspaceServices','$timeout',function($scope,WORKSPACE_SIZE,workspaceServices,$timeout){
     this.setWorkspaces = function(data){
        $scope.workspaces = data;
        $scope.currentWorkspace = workspaceServices.getLastWorkspace($scope.workspaces);
@@ -9,7 +9,8 @@ app.controller('ControlPanelController',['$scope','workspaceServices','$timeout'
     $scope.lastWorkspace = {};
     $scope.isEdit = false;
     $scope.isNew = false;
-
+    $scope.resize = false;
+    $scope.sizeArray = WORKSPACE_SIZE.sizeArray;
     $scope.editWorkspace = function (){
         $scope.isEdit = true;
         $scope.selectedIndex = $scope.workspaces.indexOf($scope.currentWorkspace);
@@ -17,10 +18,16 @@ app.controller('ControlPanelController',['$scope','workspaceServices','$timeout'
     };
     $scope.addWorkspace = function (){
         $scope.isEdit = true;
+        $scope.resize = true;
         $scope.lastWorkspace = $scope.currentWorkspace;
         $scope.currentWorkspace = workspaceServices.getNewWorkspace();
         $scope.isNew = true;
     };
+    $scope.changeWorkspaceSize = function(){
+        workspaceServices.changeWorkspaceSize($scope.currentWorkspace);
+        console.log($scope.currentWorkspace);
+        rebuildWorkspace();
+    }
     var setEditView = function(){
             $scope.isEdit = false;
     };
@@ -54,12 +61,24 @@ app.controller('ControlPanelController',['$scope','workspaceServices','$timeout'
         console.log("change");
         workspaceServices.changeWorkspace($scope.currentWorkspace);
     }
-    $scope.$on('updateWorkspace',function(event){
-        event.stopPropagation();
+    var rebuildWorkspace = function(){
         $timeout(function(){
             $scope.currentWorkspace = angular.copy($scope.currentWorkspace);
-            $scope.workspaces[$scope.selectedIndex] = $scope.currentWorkspace;
+            if(!$scope.isNew){
+                $scope.workspaces[$scope.selectedIndex] = $scope.currentWorkspace;
+            }
         });
+    };
+    $scope.$on('updateWorkspace',function(event){
+        event.stopPropagation();
+        rebuildWorkspace();
     });
-
+    $scope.$on('disableResize',function(event){
+        event.stopPropagation();
+        $scope.resize = false;
+    });
+    $scope.$on('activateResize',function(event){
+        event.stopPropagation();
+        $scope.resize = true;
+    });
 }]);

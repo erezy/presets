@@ -1,5 +1,5 @@
 var configModule = angular.module('configModule',['ngAnimate', 'mgcrea.ngStrap']);
-configModule.constant('WORKSPACE_SIZE', { row:4,col:5,size:20 } );
+configModule.constant('WORKSPACE_SIZE', { row:4,col:5,sizeArray:[2,3,4,5,6] } );
 configModule.constant('BOX_TYPES',  [{id:1, name:'דף אינטרנט',form:"url",html:"types/iframe"},
                                     {id:2, name:'קובץ',form:"file",html:"types/iframe"},
                                     {id:3, name:'מצב עבודה',form:"",html:"types/workspaceStatus"},
@@ -19,15 +19,23 @@ configModule.filter('boxType',function(BOX_TYPES){
             }
 
 });
-configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
-    this.width = Math.floor($window.innerWidth/WORKSPACE_SIZE.col) - WORKSPACE_SIZE.col*2;
-    this.height = Math.floor(($window.innerHeight-45)/WORKSPACE_SIZE.row) - WORKSPACE_SIZE.col*2;
+configModule.service('boxUtils',function($window,BOX_TYPES){
+    this.width = 0;
+    this.height = 0;
+    this.cols = 0;
+    this.rows = 0;
     this.headerHeight = 0;
     this.getHeaderHeight = function(){
         if(this.headerHeight == 0){
             this.headerHeight = angular.element( document.querySelector( '.controlPanel' ) )[0].clientHeight;
         }
         return this.headerHeight;
+    };
+    this.setBoxSize = function(workspace){
+        this.cols = workspace.cols;
+        this.rows = workspace.rows;
+        this.width = Math.floor($window.innerWidth/this.cols) - 24/this.cols;
+        this.height = Math.floor(($window.innerHeight-45)/this.rows) - 48/this.rows;
     };
     this.getBoxTypes = function(){
         return BOX_TYPES;
@@ -67,7 +75,7 @@ configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
         return true;
     };
     this.getNewBoxArray = function(boxes,borders,chosenId){
-        var maxRow = 0, maxCol = 0,minRow = WORKSPACE_SIZE.row, minCol = WORKSPACE_SIZE.col;
+        var maxRow = 0, maxCol = 0,minRow = this.rows, minCol = this.cols;
         var box;
         for (var i = 0; i < boxes.length; i++) {
             box = boxes[i];
@@ -94,7 +102,7 @@ configModule.service('boxUtils',function($window,WORKSPACE_SIZE,BOX_TYPES){
         }
         for (var row = minRow; row <= maxRow; row++) {
             for (var col = minCol; col <= maxCol; col++) {
-                box = boxes[row*WORKSPACE_SIZE.col+col];
+                box = boxes[row*this.cols+col];
 
                 if ((box.isSet && box.id != chosenId) || (box.hidden && box.underBox != chosenId)) {
                     return null;

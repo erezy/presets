@@ -10,7 +10,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
             for (var i = 0; i < boxes.length; i++) {
                 box = boxes[i];
                 if(box.isSet) {
-                    childScope = scope.$new();
+                    childScope = scope.mainScope.$new();
                     childScope.box = box;
                     childScope.templ = boxUtils.getTemplateByTypeId(box.typeId,false);
                     element.append($compile('<box class="box" />')(childScope));
@@ -26,7 +26,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
             for (var i = 0; i < boxes.length; i++) {
                 box = boxes[i];
                 if(!box.hidden) {
-                    childScope = scope.$new();
+                    childScope = scope.mainScope.$new();
                     childScope.box = box;
                     if(box.isSet){
                         childScope.templ = "activeBox";
@@ -47,6 +47,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
             isEdit:'@type'
         },
         controller: function ($scope) {
+            $scope.maps = [];
             this.chosenId = null;
             $scope.$on('setTheChosenOne',function(event,chosenId){
                 event.stopPropagation();
@@ -77,13 +78,30 @@ uiModule.directive('workspace',function($compile,boxUtils){
             $scope.deleteBox = function(boxId){
                var boxes = $scope.currWorkspace.tiles;
                boxUtils.deleteBox(boxes,boxId);
+               var box, isOneSet = false;
+               for (var i = 0; i < boxes.length && !isOneSet; i++) {
+                   box = boxes[i];
+                   if(box.isSet){
+                       isOneSet = true;
+                   }
+               }
+               if(!isOneSet){
+                    $scope.$emit('activateResize');
+               }
                $scope.$emit('updateWorkspace');
             };
 
         },
         link: function link(scope,element, attrs) {
             scope.$watchGroup(['currWorkspace','isEdit'],function() {
+                if(scope.currWorkspace){
+                    boxUtils.setBoxSize(scope.currWorkspace);
+                }
+                if(scope.mainScope){
+                    scope.mainScope.$destroy();
+                }
                 element.html("");
+                scope.mainScope = scope.$new();
                 if(scope.isEdit == "true"){
                     buildEditWorkspace(scope,element);
                 }else{
@@ -91,9 +109,13 @@ uiModule.directive('workspace',function($compile,boxUtils){
                 }
             });
         }
-
     }
 });
+
+
+
+
+
 
 uiModule.directive('box',function(boxUtils,$timeout){
     return {
@@ -104,7 +126,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
            scope.$watch("templ",function(templ){
                scope.contentUrl = 'templates/' + templ + '.html';
                if(templ == "types/map"){
-                   $timeout(function (){ var viewer = new Cesium.Viewer('cesiumContainer');console.log(viewer);},100);
+                   $timeout(function (){ scope.maps[scope.box.id] = new Cesium.Viewer('cesiumContainer'+scope.box.id);},100);
 
                }
            });
@@ -123,11 +145,18 @@ uiModule.directive('box',function(boxUtils,$timeout){
            element.css(styles);
            scope.dropChannel = "active";
            if(box.size[0] > 1 || box.size[1] > 1){
-               scope.resize = true;
+               scope.collapse = true;
                scope.draggable = false;
                scope.dropChannel = "notActive";
            }
-
+           scope.$on('$destroy',function(){
+                var mapView = scope.maps[scope.box.id];
+                if(mapView && !mapView.isDestroyed()){
+                    console.log(scope.maps[scope.box.id]);
+                    scope.maps[scope.box.id].destroy();
+                    scope.maps[scope.box.id] = null;
+                }
+           });
         },
         controller: function ($scope,$timeout,$sce) {
             $scope.getSrc = function(){
@@ -151,7 +180,8 @@ uiModule.directive('box',function(boxUtils,$timeout){
              });
             $scope.$on('editSave', function(event,form) {
                 event.stopPropagation();
-               var box = $scope.box;
+                $scope.$emit('disableResize');
+                var box = $scope.box;
                 $scope.templ = "activeBox";
                 box.isSet = true;
                 box.formData = form.data;
@@ -160,10 +190,16 @@ uiModule.directive('box',function(boxUtils,$timeout){
                   $scope.draggable = true;
                 }
             });
+
         },
         templateUrl: 'templates/box.html'
     }
 });
+
+
+
+
+
 
 uiModule.controller('EditBoxController',function($scope,boxUtils){
     $scope.boxTypes = boxUtils.getBoxTypes();
@@ -199,6 +235,11 @@ uiModule.controller('EditBoxController',function($scope,boxUtils){
     };
 
 });
+
+
+
+
+
 
 uiModule.directive('expended', ['$document', function($document) {
         return function (scope, element, attr) {

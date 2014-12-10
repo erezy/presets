@@ -83,7 +83,9 @@ public class WorkspacesController extends Controller {
             String workspaceId = this.workspacesRepo.add(
                     addModel.getName(),
                     addModel.getDescription(),
-                    new Date(addModel.getExpired())
+                    new Date(addModel.getExpired()),
+                    addModel.getCols(),
+                    addModel.getRows()
             );
 
             if(workspaceId == null){
@@ -214,6 +216,8 @@ public class WorkspacesController extends Controller {
                     updateModel.getName(),
                     updateModel.getDescription(),
                     new Date(updateModel.getExpired()),
+                    updateModel.getCols(),
+                    updateModel.getRows(),
                     tiles))
             {
                 return badRequest(Json.toJson(new String[]{"Server error!", "Can't update!"}));
