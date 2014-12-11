@@ -1,3 +1,7 @@
+.theme-option{
+    width: 10% !important;
+    float:left;
+}
 .controlPanel{
     padding: 5px 5px;
 }
@@ -83,7 +87,7 @@
 .modal-footer {
     text-align:left;
 }
-.left-close{
+.left{
     float: left;
 }
 
@@ -168,4 +172,8 @@
 }
 .nohover .box:hover{
     z-index:100;
+}
+
+.cesium{
+    height: inherit;
 }

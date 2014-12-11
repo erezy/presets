@@ -1,5 +1,8 @@
 var app = angular.module('presets',['uiModule','serverModule']);
-app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','workspaceServices','$timeout',function($scope,WORKSPACE_SIZE,workspaceServices,$timeout){
+app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','workspaceServices','$timeout',function($scope,WORKSPACE_SIZE,THEMES,workspaceServices,$timeout){
+    $scope.themeOptions = THEMES;
+    $scope.selectedTheme = $scope.themeOptions[0];
+
     this.setWorkspaces = function(data){
        $scope.workspaces = data;
        $scope.currentWorkspace = workspaceServices.getLastWorkspace($scope.workspaces);

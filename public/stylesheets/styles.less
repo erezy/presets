@@ -1,9 +1,10 @@
 //////////////////////////////////////////////////////
 // CONSTANTS
 
-@activeBox: #88b;
-@activeBoxTitle: #fff;
-@inactiveBox: #ccd;
+@box: #ccd;
+@strongBox: #88b;
+@boxTitle: #fff;
+@strongTitle: #224;
 @boxGradient: #eee;
 @modalTitle: #333;
 @shadow: #333;
@@ -18,44 +19,46 @@
 
 //Theme Definitions by parametric mixin numbers (1), (2), etc.
 .themeDefs(1) {
-  @activeBox: #88b;
-  @activeBoxTitle: #fff;
-  @inactiveBox: #ccd;
+  @box: #ccd;
+  @strongBox: #88b;
+  @boxTitle: #eee;
+  @strongTitle: #224;
   @boxGradient: #eee;
   @modalTitle: #333;
   @shadow: #333;
   @wsStatusGradient: #ddd;
-  @dragButtonGradient: #fff;
+  @dragButtonGradient: #ddd;
   @dragButton: #99b;
-
   @dragBoxShadow:#99b;
 }
 
 .themeDefs(2) {
   //inverse of 1
-  @activeBox: #88b;
-  @activeBoxTitle: #fff;
-  @inactiveBox: #ccd;
-  @boxGradient: #eee;
+  @box: #ccc;
+  @strongBox: #aaa;
+  @boxTitle: #ffe;
+  @strongTitle: #224;
+  @boxGradient: #ffe;
   @modalTitle: #333;
   @shadow: #333;
-  @wsStatusGradient: #ddd;
-  @dragButtonGradient: #fff;
-  @dragButton: #99b;
-  @dragBoxShadow:#99b;
+  @wsStatusGradient: #eed;
+  @dragButtonGradient: #ffe;
+  @dragButton: #bbb;
+  @dragBoxShadow:#bbb;
 }
 
 .themeDefs(3) {
-  @activeBox: #88b;
-  @activeBoxTitle: #fff;
-  @inactiveBox: #ccd;
+  @box: #8fbfdf;
+  @strongBox: #47a;
+  @boxTitle: #ffe;
+  @strongTitle: #446;
   @boxGradient: #eee;
   @modalTitle: #333;
   @shadow: #333;
-  @wsStatusGradient: #ddd;
-  @dragButtonGradient: #fff;
-  @dragButton: #99b;
-  @dragBoxShadow:#99b;
+  @wsStatusGradient: #cfdfef;
+  @dragButtonGradient: #eee;
+  @dragButton: #47a;
+  @dragBoxShadow:#47a;
 }
 
 
@@ -68,59 +71,62 @@
 
 .buildThemes(@index) when (@index < @numberOfThemes + 1) {
 
+  .theme-@{index}-color {
+          .themeDefs(@index);
+          background-color: @box;
+  }
   .theme-@{index} {
       .themeDefs(@index); 
+      
       .controlPanel{
-            background: linear-gradient(@boxGradient ,@activeBox);
+            background: linear-gradient(@boxGradient ,@strongBox);
+            color: @strongTitle;
         }
         .active-box {
-            background-color: @activeBox;
-            color: @activeBoxTitle;
+            background: linear-gradient(0deg, @wsStatusGradient 75%,@box);
+            color: @boxTitle;
         }
         .inactive-box{
-            background: linear-gradient(135deg, @boxGradient,@inactiveBox );
+            background: linear-gradient(0deg, @boxGradient 90%,@box );
             &:hover{
-                background: linear-gradient(315deg, @boxGradient,@inactiveBox );
+                background: linear-gradient(180deg, @boxGradient 90%,@strongBox );
                 .add-icon{
-                    color: @activeBox;
+                    color: @strongBox;
                 }
             }
         }
         .on-drag-hover {
-            border: solid 5px @activeBox;
             box-shadow: -5px -5px 20px @dragBoxShadow;
             .inactive-box{
-                background: linear-gradient(315deg, @boxGradient,@inactiveBox );
+                background: linear-gradient(0deg, @boxGradient,@box );
             }
         }
         .add-icon{
-            color: @inactiveBox;
+            color: @box;
         }
         .modal-title{
             color: @modalTitle;
         }
         .wsStatus{
-            background: linear-gradient(0deg, @wsStatusGradient,@inactiveBox);
+            background: linear-gradient(0deg, @wsStatusGradient,@box);
         }
         .dragButton{
             box-shadow: 0px 1px 1px @shadow;
-            background: linear-gradient(0deg, @dragButton,@dragButtonGradient);
+            background: linear-gradient(180deg, @dragButtonGradient,@strongBox);
         }
         .press{
-            background: linear-gradient(0deg, @dragButtonGradient, @dragButton);
+            background: linear-gradient(0deg, @dragButtonGradient,@strongBox);
         }
         .btn-shadow{
             box-shadow: 0px 0px 5px @shadow;
         }
         .nohover{
             .glyphicon-btn:hover{
-                .btn-shadow;
-                background-color:@boxGradient;
-                color:@activeBox;
-                border: solid 1px @activeBox;
+                color:@boxTitle;
             }
             .active-box:hover{
                 box-shadow: -5px -5px 20px @dragBoxShadow;
+                color: @strongTitle;
             }
         }
     }

@@ -5,6 +5,8 @@ configModule.constant('BOX_TYPES',  [{id:1, name:'דף אינטרנט',form:"url
                                     {id:3, name:'מצב עבודה',form:"",html:"types/workspaceStatus"},
                                     {id:4, name:'מפה',form:"",html:"types/map"}]
                         );
+configModule.constant('THEMES',  ['theme-1','theme-2','theme-3'] );
+
 configModule.filter('boxType',function(BOX_TYPES){
     return function(typeId){
                 for(key in BOX_TYPES){
