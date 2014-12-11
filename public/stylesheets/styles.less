@@ -1,0 +1,132 @@
+//////////////////////////////////////////////////////
+// CONSTANTS
+
+@activeBox: #88b;
+@activeBoxTitle: #fff;
+@inactiveBox: #ccd;
+@boxGradient: #eee;
+@modalTitle: #333;
+@shadow: #333;
+@wsStatusGradient: #ddd;
+@dragButtonGradient: #fff;
+@dragButton: #99b;
+@dragBoxShadow:#99b;
+@numberOfThemes: 3; //controls theme loop
+
+//////////////////////////////////////////////////////
+// MIXINS
+
+//Theme Definitions by parametric mixin numbers (1), (2), etc.
+.themeDefs(1) {
+  @activeBox: #88b;
+  @activeBoxTitle: #fff;
+  @inactiveBox: #ccd;
+  @boxGradient: #eee;
+  @modalTitle: #333;
+  @shadow: #333;
+  @wsStatusGradient: #ddd;
+  @dragButtonGradient: #fff;
+  @dragButton: #99b;
+
+  @dragBoxShadow:#99b;
+}
+
+.themeDefs(2) {
+  //inverse of 1
+  @activeBox: #88b;
+  @activeBoxTitle: #fff;
+  @inactiveBox: #ccd;
+  @boxGradient: #eee;
+  @modalTitle: #333;
+  @shadow: #333;
+  @wsStatusGradient: #ddd;
+  @dragButtonGradient: #fff;
+  @dragButton: #99b;
+  @dragBoxShadow:#99b;
+}
+
+.themeDefs(3) {
+  @activeBox: #88b;
+  @activeBoxTitle: #fff;
+  @inactiveBox: #ccd;
+  @boxGradient: #eee;
+  @modalTitle: #333;
+  @shadow: #333;
+  @wsStatusGradient: #ddd;
+  @dragButtonGradient: #fff;
+  @dragButton: #99b;
+  @dragBoxShadow:#99b;
+}
+
+
+//////////////////////////////////////////////////////
+// GENERAL STYLING
+
+
+//////////////////////////////////////////////////////
+// THEME BUILDING
+
+.buildThemes(@index) when (@index < @numberOfThemes + 1) {
+
+  .theme-@{index} {
+      .themeDefs(@index); 
+      .controlPanel{
+            background: linear-gradient(@boxGradient ,@activeBox);
+        }
+        .active-box {
+            background-color: @activeBox;
+            color: @activeBoxTitle;
+        }
+        .inactive-box{
+            background: linear-gradient(135deg, @boxGradient,@inactiveBox );
+            &:hover{
+                background: linear-gradient(315deg, @boxGradient,@inactiveBox );
+                .add-icon{
+                    color: @activeBox;
+                }
+            }
+        }
+        .on-drag-hover {
+            border: solid 5px @activeBox;
+            box-shadow: -5px -5px 20px @dragBoxShadow;
+            .inactive-box{
+                background: linear-gradient(315deg, @boxGradient,@inactiveBox );
+            }
+        }
+        .add-icon{
+            color: @inactiveBox;
+        }
+        .modal-title{
+            color: @modalTitle;
+        }
+        .wsStatus{
+            background: linear-gradient(0deg, @wsStatusGradient,@inactiveBox);
+        }
+        .dragButton{
+            box-shadow: 0px 1px 1px @shadow;
+            background: linear-gradient(0deg, @dragButton,@dragButtonGradient);
+        }
+        .press{
+            background: linear-gradient(0deg, @dragButtonGradient, @dragButton);
+        }
+        .btn-shadow{
+            box-shadow: 0px 0px 5px @shadow;
+        }
+        .nohover{
+            .glyphicon-btn:hover{
+                .btn-shadow;
+                background-color:@boxGradient;
+                color:@activeBox;
+                border: solid 1px @activeBox;
+            }
+            .active-box:hover{
+                box-shadow: -5px -5px 20px @dragBoxShadow;
+            }
+        }
+    }
+    .buildThemes(@index + 1);
+}
+//stop loop
+.buildThemes(@index) {}
+//start theme building loop
+.buildThemes(1);
