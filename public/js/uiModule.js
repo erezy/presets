@@ -250,7 +250,7 @@ uiModule.directive('expended', ['$document', function($document) {
                     startX = event.pageX;
                     startY = event.pageY;
                     element.css({
-                        backgroundColor: 'rgba(100,150,200,.5)',
+                        opacity: '0.5',
                         margin:'0px',
                         width: '1px',
                         height: '1px',
@@ -302,7 +302,7 @@ uiModule.directive('expended', ['$document', function($document) {
                     var styles =  {
                                 width: '100%',
                                 height: '100%',
-                                backgroundColor: 'rgba(0,0,0,0)',
+                                opacity:'0',
                                 position: 'absolute',
                                 marginTop: '-30px',
                                 marginLeft: '-12px',
