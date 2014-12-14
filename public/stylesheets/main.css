@@ -58,6 +58,10 @@
     float: left;
     display:inline-block;
 }
+.red-box{
+    background: rgba(255,0,0,.5) !important;
+    cursor: not-allowed;
+}
 .modal  {
     position: fixed;
     top: 40%;

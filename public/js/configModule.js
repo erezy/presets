@@ -77,13 +77,26 @@ configModule.service('boxUtils',function($window,BOX_TYPES){
         return true;
     };
     this.getNewBoxArray = function(boxes,borders,chosenId){
+        return this.checkOverlap(boxes,borders,chosenId,true);
+    };
+    this.checkOverlap = function(boxes,borders,chosenId,mouseUp){
         var maxRow = 0, maxCol = 0,minRow = this.rows, minCol = this.cols;
         var box;
+        for (var i = 0; i < boxes.length; i++) {
+                    box = boxes[i];
+                    box.overlap = false;
+        }
         for (var i = 0; i < boxes.length; i++) {
             box = boxes[i];
             if (this.isInArea(box, borders)) {
                 if (box.id != chosenId) {
                     if (box.isSet || (box.hidden && box.underBox != chosenId)) {
+                        if(!mouseUp) {
+                           if(box.hidden){
+                               box = boxes[box.underBox];
+                           }
+                           box.overlap = true;
+                        }
                         return null;
                     }
                 }
@@ -105,19 +118,31 @@ configModule.service('boxUtils',function($window,BOX_TYPES){
         for (var row = minRow; row <= maxRow; row++) {
             for (var col = minCol; col <= maxCol; col++) {
                 box = boxes[row*this.cols+col];
-
                 if ((box.isSet && box.id != chosenId) || (box.hidden && box.underBox != chosenId)) {
+                    if(!mouseUp) {
+                        if(box.hidden){
+                           box = boxes[box.underBox];
+                        }
+                        box.overlap = true;
+                    }
                     return null;
-                }
-                if(box.id != chosenId){
-                    box.hidden = true;
-                    box.underBox = chosenId;
                 }
             }
         }
-        var chosenBox = boxes[chosenId];
-        chosenBox.location = [minRow,minCol];
-        chosenBox.size = [maxRow-minRow+1,maxCol-minCol+1];
+        if(mouseUp){
+            for (var row = minRow; row <= maxRow; row++) {
+                for (var col = minCol; col <= maxCol; col++) {
+                    box = boxes[row*this.cols+col];
+                    if(box.id != chosenId && mouseUp){
+                        box.hidden = true;
+                        box.underBox = chosenId;
+                    }
+                }
+            }
+            var chosenBox = boxes[chosenId];
+            chosenBox.location = [minRow,minCol];
+            chosenBox.size = [maxRow-minRow+1,maxCol-minCol+1];
+        }
         return boxes;
     };
     this.getMaxLocation = function(box){

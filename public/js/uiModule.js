@@ -62,13 +62,18 @@ uiModule.directive('workspace',function($compile,boxUtils){
             $scope.$on('expendBox',function(event,borders){
                 event.stopPropagation();
                 var boxes = $scope.currWorkspace.tiles;
-                var result = boxUtils.getNewBoxArray(boxes,borders,this.chosenId);
-                if(result == null){
-                    alert("אזור חופף");
-                }else{
-                    $scope.$emit('updateWorkspace');
-                }
+                 $scope.$apply(function(){
+                     var result = boxUtils.getNewBoxArray(boxes,borders,this.chosenId);
+                     if(result != null){
+                        $scope.$emit('updateWorkspace');
+                     }
+                 });
                 this.chosenId = null;
+            });
+            $scope.$on('checkOverlap',function(event,borders){
+                event.stopPropagation();
+                var boxes = $scope.currWorkspace.tiles;
+                $scope.$apply(function(){boxUtils.checkOverlap(boxes,borders,this.chosenId,false);});
             });
             $scope.collapseBox = function(boxId){
                 var boxes = $scope.currWorkspace.tiles;
@@ -132,6 +137,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
            });
 
            var box = scope.box;
+           box.overlap = false;
            var width = box.size[1]*boxUtils.width;
            var height = box.size[0]*boxUtils.height;
            var top = box.location[0]*(boxUtils.height+1);
@@ -166,10 +172,9 @@ uiModule.directive('box',function(boxUtils,$timeout){
                 }
 
             }
-           $scope.onDrop = function($event,droppedBox){
+            $scope.onDrop = function($event,droppedBox){
                 $scope.$emit('dragBox',$scope.box.id,droppedBox.id);
             };
-
             $scope.$on('editStart', function(event) {
                 event.stopPropagation();
                 var box = $scope.box;
@@ -288,6 +293,12 @@ uiModule.directive('expended', ['$document', function($document) {
                         height: y1 + 'px'
                     };
                     element.css(styles);
+                    var top = startY + y;
+                    var left = startX + x;
+                    var bottom = top + element[0].clientHeight;
+                    var right = left + element[0].clientWidth;
+                    var borders = {top:top,left:left,bottom:bottom,right:right};
+                    scope.$emit('checkOverlap',borders);
                 }
 
                 function mouseup() {
