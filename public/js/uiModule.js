@@ -264,6 +264,8 @@ uiModule.directive('expended', ['$document', function($document) {
                         left: startX+'px'
                     });
                     angular.element(document.querySelector( 'workspace' )).removeClass("nohover");
+                    angular.element(element).parent().parent().addClass("onselect");
+
                     $document.on('mousemove', mousemove);
                     $document.on('mouseup', mouseup);
                     scope.$emit('setTheChosenOne',scope.box.id);
@@ -323,6 +325,7 @@ uiModule.directive('expended', ['$document', function($document) {
                             };
                     element.css(styles);
                     angular.element(document.querySelector( 'workspace' )).addClass("nohover");
+                    angular.element(element).parent().parent().removeClass("onselect");
                 }
             }
     }]);

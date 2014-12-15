@@ -183,7 +183,8 @@ configModule.config(function($datepickerProvider) {
 configModule.config(function($modalProvider) {
     angular.extend($modalProvider.defaults, {
         animation: 'am-fade-and-scale',
-        backdrop:'static'
+        backdrop:'static',
+        container: 'body'
     });
 })
 

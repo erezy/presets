@@ -5,11 +5,11 @@
             <p>{{box.typeId | boxType}}</p>
         </div>
         <div class="options">
-            <div class="glyphicon-btn glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteBox(box.id)"></div>
-            <div class="glyphicon-btn glyphicon glyphicon-pencil" aria-hidden="true"
+            <div class="glyphicon-btn glyphicon glyphicon-remove animate-delete" aria-hidden="true" ng-click="deleteBox(box.id)"></div>
+            <div class="glyphicon-btn glyphicon glyphicon-pencil animate-wiggle" aria-hidden="true"
                   bs-modal="modal" data-template="templates/editBox.html"></div>
-            <div class="glyphicon-btn glyphicon glyphicon-fullscreen" aria-hidden="true" ><div expended class="expendable"></div></div>
-            <div class="glyphicon-btn glyphicon glyphicon-resize-small" aria-hidden="true" ng-click="collapseBox(box.id)" ng-show="collapse"></div>
+            <div class="glyphicon-btn glyphicon glyphicon-fullscreen animate-pluse-fade-out" aria-hidden="true" ><div expended class="expendable"></div></div>
+            <div class="glyphicon-btn glyphicon glyphicon-resize-small animate-minus-fade-out" aria-hidden="true" ng-click="collapseBox(box.id)" ng-show="collapse"></div>
         </div>
     </div>
 </div>

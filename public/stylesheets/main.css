@@ -57,6 +57,7 @@
 .active-box > .content > .options{
     float: left;
     display:inline-block;
+    opacity:0;
 }
 .red-box{
     background: rgba(255,0,0,.5) !important;

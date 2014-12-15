@@ -99,7 +99,9 @@ serverModule.factory('workspaceServices',function(boxProvider,WORKSPACE_SIZE,sto
                         }
                    }
                }
-               return workspaces[0];
+            }
+            if(workspaces.length > 0){
+                return workspaces[0];
             }
            return {};
        },

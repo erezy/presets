@@ -5,7 +5,7 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
 
     this.setWorkspaces = function(data){
        $scope.workspaces = data;
-       $scope.currentWorkspace = workspaceServices.getLastWorkspace($scope.workspaces);
+       $scope.currentWorkspace = workspaceServices.getLastWorkspace(data);
     };
     workspaceServices.getAllWorkspaces(this.setWorkspaces);
 

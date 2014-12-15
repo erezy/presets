@@ -18,11 +18,11 @@ public class AddTileIModel {
     private String type;
 
     @MinLength(2)
-    @MaxLength(50)
+    @MaxLength(100)
     private String path;
 
     @MinLength(2)
-    @MaxLength(50)
+    @MaxLength(100)
     private String url;
 
     @MinLength(2)
