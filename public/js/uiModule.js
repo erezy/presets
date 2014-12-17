@@ -65,7 +65,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
                var box, isOneSet = false;
                for (var i = 0; i < boxes.length && !isOneSet; i++) {
                    box = boxes[i];
-                   if(box.is Set){
+                   if(box.isSet){
                        isOneSet = true;
                    }
                }
