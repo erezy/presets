@@ -28,7 +28,6 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
     };
     $scope.changeWorkspaceSize = function(){
         workspaceServices.changeWorkspaceSize($scope.currentWorkspace);
-        console.log($scope.currentWorkspace);
         rebuildWorkspace();
     }
     var setEditView = function(){

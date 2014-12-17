@@ -49,15 +49,35 @@ uiModule.directive('workspace',function($compile,boxUtils){
         controller: function ($scope) {
             $scope.maps = [];
             this.chosenId = null;
-            $scope.$on('setTheChosenOne',function(event,chosenId){
-                event.stopPropagation();
-                this.chosenId = chosenId;
-            });
-            $scope.$on('dragBox',function(event,boxId,droppedBoxId){
-                event.stopPropagation();
+            $scope.dragBox = function(boxId,droppedBoxId){
                 var boxes = $scope.currWorkspace.tiles;
                 boxUtils.switchBoxes(boxes,boxId,droppedBoxId);
                 $scope.$emit('updateWorkspace');
+            };
+             $scope.collapseBox = function(boxId){
+                var boxes = $scope.currWorkspace.tiles;
+                boxUtils.collapseBox(boxes,boxId);
+                $scope.$emit('updateWorkspace');
+            };
+            $scope.deleteBox = function(boxId){
+               var boxes = $scope.currWorkspace.tiles;
+               boxUtils.deleteBox(boxes,boxId);
+               var box, isOneSet = false;
+               for (var i = 0; i < boxes.length && !isOneSet; i++) {
+                   box = boxes[i];
+                   if(box.is Set){
+                       isOneSet = true;
+                   }
+               }
+               if(!isOneSet){
+                    $scope.$emit('activateResize');
+               }
+               $scope.$emit('updateWorkspace');
+            };
+
+            $scope.$on('setTheChosenOne',function(event,chosenId){
+                event.stopPropagation();
+                this.chosenId = chosenId;
             });
             $scope.$on('expendBox',function(event,borders){
                 event.stopPropagation();
@@ -75,26 +95,6 @@ uiModule.directive('workspace',function($compile,boxUtils){
                 var boxes = $scope.currWorkspace.tiles;
                 $scope.$apply(function(){boxUtils.checkOverlap(boxes,borders,this.chosenId,false);});
             });
-            $scope.collapseBox = function(boxId){
-                var boxes = $scope.currWorkspace.tiles;
-                boxUtils.collapseBox(boxes,boxId);
-                $scope.$emit('updateWorkspace');
-            };
-            $scope.deleteBox = function(boxId){
-               var boxes = $scope.currWorkspace.tiles;
-               boxUtils.deleteBox(boxes,boxId);
-               var box, isOneSet = false;
-               for (var i = 0; i < boxes.length && !isOneSet; i++) {
-                   box = boxes[i];
-                   if(box.isSet){
-                       isOneSet = true;
-                   }
-               }
-               if(!isOneSet){
-                    $scope.$emit('activateResize');
-               }
-               $scope.$emit('updateWorkspace');
-            };
 
         },
         link: function link(scope,element, attrs) {
@@ -163,7 +163,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
                 }
            });
         },
-        controller: function ($scope,$timeout,$sce) {
+        controller: function ($scope,$sce) {
             $scope.getSrc = function(){
                 if($scope.box.typeId == 1){
                     return $sce.trustAsResourceUrl($scope.box.formData.url);
@@ -173,15 +173,9 @@ uiModule.directive('box',function(boxUtils,$timeout){
 
             }
             $scope.onDrop = function($event,droppedBox){
-                $scope.$emit('dragBox',$scope.box.id,droppedBox.id);
+               $scope.dragBox($scope.box.id,droppedBox.id);
             };
-            $scope.$on('editStart', function(event) {
-                event.stopPropagation();
-                var box = $scope.box;
-                if(box.isSet){
-                    $timeout(function(){$scope.$broadcast('initBox',box)},500);
-                }
-             });
+
             $scope.$on('editSave', function(event,form) {
                 event.stopPropagation();
                 $scope.$emit('disableResize');
@@ -205,7 +199,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
 
 
 
-uiModule.controller('EditBoxController',function($scope,boxUtils){
+uiModule.controller('EditBoxController',function($scope,boxUtils,$timeout){
     $scope.boxTypes = boxUtils.getBoxTypes();
    $scope.title = "חלון עבודה" ;
     $scope.$watch("formTempl",function(templ){
@@ -214,14 +208,14 @@ uiModule.controller('EditBoxController',function($scope,boxUtils){
             $scope.contentUrl = 'templates/forms/' + templ + '.html';
         }
     });
-    $scope.$emit('editStart');
 
-    var unbind = $scope.$on('initBox',function(event,box){
+    var initBox = function(box){
         $scope.formTempl = boxUtils.getTemplateByTypeId(box.typeId,true);
-        $scope.editForm.selectedBoxType = box.typeId;
+        $scope.editForm.selectedBoxType = box.typeId ? $scope.boxTypes[box.typeId-1].id : "";
         $scope.editForm.data = box.formData;
-    });
-    $scope.$on('$destroy',unbind);
+    };
+    $timeout(function(){initBox($scope.box)},500);
+
     $scope.changeForm = function(){
         $scope.editForm.data = {};
         $scope.formTempl = boxUtils.getTemplateByTypeId($scope.editForm.selectedBoxType,true);
