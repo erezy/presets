@@ -31,6 +31,21 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
         workspaceServices.changeWorkspaceSize($scope.currentWorkspace);
         rebuildWorkspace();
     }
+
+    $scope.removeWorkspace = function (){
+        $scope.isEdit = false;
+        $scope.currentWorkspace = $scope.lastWorkspace;
+        if($scope.isNew){
+            $scope.isNew = false;
+        }else{
+            $scope.workspaces[$scope.selectedIndex] = $scope.currentWorkspace;
+        }
+    };
+    $scope.changeWorkspace = function(){
+        console.log("change");
+        workspaceServices.changeWorkspace($scope.currentWorkspace);
+    }
+
     var setEditView = function(){
             $scope.isEdit = false;
     };
@@ -52,19 +67,7 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
         }
         $scope.$broadcast('animateLeaveBox');
     };
-    $scope.removeWorkspace = function (){
-        $scope.isEdit = false;
-        $scope.currentWorkspace = $scope.lastWorkspace;
-        if($scope.isNew){
-            $scope.isNew = false;
-        }else{
-            $scope.workspaces[$scope.selectedIndex] = $scope.currentWorkspace;
-        }
-    };
-    $scope.changeWorkspace = function(){
-        console.log("change");
-        workspaceServices.changeWorkspace($scope.currentWorkspace);
-    }
+
     var rebuildWorkspace = function(){
         $timeout(function(){
             $scope.currentWorkspace = angular.copy($scope.currentWorkspace);
