@@ -2,44 +2,26 @@ var uiModule = angular.module('uiModule',['configModule','ang-drag-drop']);
 
 
 uiModule.directive('workspace',function($compile,boxUtils){
-    var buildViewWorkspace = function(scope,element){
+    var buildWorkspace = function(scope,element){
         var workspace = scope.currWorkspace;
         if(workspace && workspace.tiles) {
             var boxes = workspace.tiles;
             var childScope,box;
-            for (var i = 0; i < boxes.length; i++) {
-                box = boxes[i];
-                if(box.isSet) {
-                    childScope = scope.mainScope.$new();
-                    childScope.box = box;
-                    childScope.templ = boxUtils.getTemplateByTypeId(box.typeId,false);
-                    element.append($compile('<box class="box" />')(childScope));
-                }
+            var className = "box";
+            if(scope.isEdit == "true"){
+                className += " flipper";
             }
-        }
-    };
-    var buildEditWorkspace = function(scope,element){
-        var workspace = scope.currWorkspace;
-        if(workspace.tiles) {
-            var boxes = workspace.tiles;
-            var childScope,box;
             for (var i = 0; i < boxes.length; i++) {
                 box = boxes[i];
                 if(!box.hidden) {
                     childScope = scope.mainScope.$new();
                     childScope.box = box;
-                    if(box.isSet){
-                        childScope.templ = "activeBox";
-                        childScope.draggable = true;
-                    }else{
-                        childScope.templ = "inactiveBox";
-                        childScope.draggable = false;
-                    }
-                    element.append($compile('<box class="box" />')(childScope));
+                    element.append($compile('<box class="'+className+'" />')(childScope));
                 }
             }
         }
-    }
+    };
+
     return {
         restrict: 'E',
         scope: {
@@ -82,12 +64,10 @@ uiModule.directive('workspace',function($compile,boxUtils){
             $scope.$on('expendBox',function(event,borders){
                 event.stopPropagation();
                 var boxes = $scope.currWorkspace.tiles;
-                 $scope.$apply(function(){
-                     var result = boxUtils.getNewBoxArray(boxes,borders,this.chosenId);
-                     if(result != null){
-                        $scope.$emit('updateWorkspace');
-                     }
-                 });
+                 var result = boxUtils.getNewBoxArray(boxes,borders,this.chosenId);
+                  if(result != null){
+                     $scope.$emit('updateWorkspace');
+                  }
                 this.chosenId = null;
             });
             $scope.$on('checkOverlap',function(event,borders){
@@ -98,7 +78,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
 
         },
         link: function link(scope,element, attrs) {
-            scope.$watchGroup(['currWorkspace','isEdit'],function() {
+            scope.$watchGroup(['currWorkspace'],function() {
                 if(scope.currWorkspace){
                     boxUtils.setBoxSize(scope.currWorkspace);
                 }
@@ -107,12 +87,9 @@ uiModule.directive('workspace',function($compile,boxUtils){
                 }
                 element.html("");
                 scope.mainScope = scope.$new();
-                if(scope.isEdit == "true"){
-                    buildEditWorkspace(scope,element);
-                }else{
-                    buildViewWorkspace(scope,element);
-                }
+                buildWorkspace(scope,element);
             });
+
         }
     }
 });
@@ -127,13 +104,14 @@ uiModule.directive('box',function(boxUtils,$timeout){
         require: '^workspace',
         restrict: 'E',
        link: function(scope, element, attrs, tabsCtrl) {
-           scope.contentUrl = 'templates/' + scope.templ + '.html';
-           scope.$watch("templ",function(templ){
-               scope.contentUrl = 'templates/' + templ + '.html';
-               if(templ == "types/map"){
-                   $timeout(function (){ scope.maps[scope.box.id] = new Cesium.Viewer('cesiumContainer'+scope.box.id);},100);
-
-               }
+           scope.changeTemplate();
+           scope.$on('animateBox',function(event){
+                element.addClass("flipper");
+                element.removeClass("flipper-leave");
+           });
+           scope.$on('animateLeaveBox',function(event){
+               element.addClass("flipper-leave");
+               element.removeClass("flipper");
            });
 
            var box = scope.box;
@@ -164,6 +142,22 @@ uiModule.directive('box',function(boxUtils,$timeout){
            });
         },
         controller: function ($scope,$sce) {
+            $scope.changeTemplate = function(){
+               var box = $scope.box;
+               if(box.isSet){
+                    var templ =  boxUtils.getTemplateByTypeId(box.typeId,false);
+                    $scope.viewContentUrl ='templates/' + templ + '.html';
+                    if(templ == "types/map" && !$scope.maps[box.id]){
+                        $timeout(function (){ $scope.maps[box.id] = new Cesium.Viewer('cesiumContainer'+box.id);},100);
+                    }
+                    $scope.editContentUrl ='templates/activeBox.html';
+                    $scope.draggable = true;
+               }else{
+                    $scope.viewContentUrl = '';
+                    $scope.editContentUrl ='templates/inactiveBox.html';
+                    $scope.draggable = false;
+               }
+            };
             $scope.getSrc = function(){
                 if($scope.box.typeId == 1){
                     return $sce.trustAsResourceUrl($scope.box.formData.url);
@@ -171,7 +165,7 @@ uiModule.directive('box',function(boxUtils,$timeout){
                     return $sce.trustAsResourceUrl($scope.box.formData.path);
                 }
 
-            }
+            };
             $scope.onDrop = function($event,droppedBox){
                $scope.dragBox($scope.box.id,droppedBox.id);
             };
@@ -180,13 +174,13 @@ uiModule.directive('box',function(boxUtils,$timeout){
                 event.stopPropagation();
                 $scope.$emit('disableResize');
                 var box = $scope.box;
-                $scope.templ = "activeBox";
                 box.isSet = true;
                 box.formData = form.data;
                 box.typeId = form.selectedBoxType;
                 if(box.size[0] == 1 && box.size[1] == 1){
                   $scope.draggable = true;
                 }
+                $scope.changeTemplate();
             });
 
         },
@@ -240,25 +234,35 @@ uiModule.controller('EditBoxController',function($scope,boxUtils,$timeout){
 
 
 uiModule.directive('expended', ['$document', function($document) {
+        var getParentElement = function(element,className){
+                                    if(element){
+                                        if(element.hasClass(className)){
+                                            return element;
+                                        }
+                                        return getParentElement(element.parent(),className);
+                                    }
+                                    return null;
+                                };
         return function (scope, element, attr) {
                 var startX = 0, startY = 0, x = 0, y = 0, styles = {};
-
+                var offsetY = 16, offsetX = 22;
                 element.on('mousedown', function (event) {
                     // Prevent default dragging of selected content
                     event.preventDefault();
-                    startX = event.pageX;
                     startY = event.pageY;
+                    startX = event.pageX;
                     element.css({
                         opacity: '0.5',
                         margin:'0px',
                         width: '1px',
                         height: '1px',
-                        position: 'fixed',
-                        top: startY+'px',
-                        left: startX+'px'
+                        position: 'absolute',
+                        top: startY + 'px',
+                        left: startX + 'px'
                     });
                     angular.element(document.querySelector( 'workspace' )).removeClass("nohover");
-                    angular.element(element).parent().parent().addClass("onselect");
+                    getParentElement(element,"options").addClass("onselect");
+                    getParentElement(element,"box").addClass("topBox");
 
                     $document.on('mousemove', mousemove);
                     $document.on('mouseup', mouseup);
@@ -271,26 +275,29 @@ uiModule.directive('expended', ['$document', function($document) {
                     x = event.pageX - startX;
                     if(y > 0){
                         y1 = y;
-                        y = 0;
+                        y = offsetY;
                     }else{
                         y1 = -y;
+                        y += offsetY;
                     }
                     if(x > 0){
                         x1 = x;
-                        x = 0;
+                        x = offsetX;
                     }else{
                         x1 = -x;
+                        x += offsetX;
                     }
 
                     styles = {
-                        top: (startY + y) + 'px',
-                        left: (startX + x) + 'px',
+                        top: y + 'px',
+                        left: x + 'px',
                         width: x1 + 'px',
                         height: y1 + 'px'
                     };
                     element.css(styles);
-                    var top = startY + y;
-                    var left = startX + x;
+
+                    var top = startY + y - offsetY;
+                    var left = startX + x - offsetX;
                     var bottom = top + element[0].clientHeight;
                     var right = left + element[0].clientWidth;
                     var borders = {top:top,left:left,bottom:bottom,right:right};
@@ -300,8 +307,8 @@ uiModule.directive('expended', ['$document', function($document) {
                 function mouseup() {
                     $document.off('mousemove', mousemove);
                     $document.off('mouseup', mouseup);
-                    var top = startY + y;
-                    var left = startX + x;
+                    var top = startY + y - offsetY;
+                    var left = startX + x - offsetX;
                     var bottom = top + element[0].clientHeight;
                     var right = left + element[0].clientWidth;
                     var borders = {top:top,left:left,bottom:bottom,right:right};
@@ -315,11 +322,12 @@ uiModule.directive('expended', ['$document', function($document) {
                                 marginLeft: '-12px',
                                 top: 'initial',
                                 left: 'initial',
-                                zIndex:'1000'
+                                zIndex:'20'
                             };
                     element.css(styles);
                     angular.element(document.querySelector( 'workspace' )).addClass("nohover");
-                    angular.element(element).parent().parent().removeClass("onselect");
+                    getParentElement(element,"options").removeClass("onselect");
+                    getParentElement(element,"box").removeClass("topBox");
                 }
             }
     }]);

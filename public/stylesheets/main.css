@@ -145,7 +145,10 @@
     position: absolute;
     margin-top: -30px;
     margin-left: -12px;
-    z-index: 1000;
+    z-index: 20;
+}
+.topBox{
+    z-index: 30;
 }
 .dragButton{
     height: 20px;
@@ -176,9 +179,42 @@
     height:25px;
 }
 .nohover .box:hover{
-    z-index:100;
+    z-index:10;
 }
 
 .cesium{
     height: inherit;
+}
+
+.flipper{
+    transform: perspective(1000px) rotateY(180deg);
+	transition: 1s;
+	transform-style: preserve-3d;
+	position: absolute;
+}
+.flipper-leave{
+    transform: perspective(1000px) rotateY(0deg);
+	transition: 1s;
+	transform-style: preserve-3d;
+	position: absolute;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	backface-visibility: hidden;
+	position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+	/*z-index: 2;*/
+	/* for firefox 31 */
+	transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+	transform: rotateY(180deg);
 }

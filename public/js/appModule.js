@@ -15,6 +15,7 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
     $scope.resize = false;
     $scope.sizeArray = WORKSPACE_SIZE.sizeArray;
     $scope.editWorkspace = function (){
+        $scope.$broadcast('animateBox');
         $scope.isEdit = true;
         $scope.selectedIndex = $scope.workspaces.indexOf($scope.currentWorkspace);
         $scope.lastWorkspace = angular.copy($scope.currentWorkspace);
@@ -49,6 +50,7 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
         }else{
             workspaceServices.updateWorkspace(setEditView,$scope.currentWorkspace);
         }
+        $scope.$broadcast('animateLeaveBox');
     };
     $scope.removeWorkspace = function (){
         $scope.isEdit = false;
