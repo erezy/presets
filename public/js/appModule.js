@@ -2,6 +2,11 @@ var app = angular.module('presets',['uiModule','serverModule']);
 app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','workspaceServices','$timeout',function($scope,WORKSPACE_SIZE,THEMES,workspaceServices,$timeout){
     $scope.themeOptions = THEMES;
     $scope.selectedTheme = $scope.themeOptions[0];
+    $scope.lastWorkspace = {};
+    $scope.isEdit = false;
+    $scope.isNew = false;
+    $scope.resize = false;
+    $scope.sizeArray = WORKSPACE_SIZE.sizeArray;
 
     this.setWorkspaces = function(data){
        $scope.workspaces = data;
@@ -9,11 +14,6 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
     };
     workspaceServices.getAllWorkspaces(this.setWorkspaces);
 
-    $scope.lastWorkspace = {};
-    $scope.isEdit = false;
-    $scope.isNew = false;
-    $scope.resize = false;
-    $scope.sizeArray = WORKSPACE_SIZE.sizeArray;
     $scope.editWorkspace = function (){
         $scope.$broadcast('animateBox');
         $scope.isEdit = true;
