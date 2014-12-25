@@ -77,7 +77,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
             });
 
         },
-        link: function link(scope,element, attrs) {
+        link: function (scope,element, attrs) {
             scope.$watchGroup(['currWorkspace'],function() {
                 if(scope.currWorkspace){
                     boxUtils.setBoxSize(scope.currWorkspace);
@@ -170,18 +170,17 @@ uiModule.directive('box',function(boxUtils,$timeout){
                $scope.dragBox($scope.box.id,droppedBox.id);
             };
 
-            $scope.$on('editSave', function(event,form) {
-                event.stopPropagation();
+           $scope.editSave = function(form){
                 $scope.$emit('disableResize');
                 var box = $scope.box;
                 box.isSet = true;
                 box.formData = form.data;
                 box.typeId = form.selectedBoxType;
                 if(box.size[0] == 1 && box.size[1] == 1){
-                  $scope.draggable = true;
+                    $scope.draggable = true;
                 }
                 $scope.changeTemplate();
-            });
+            };
 
         },
         templateUrl: 'templates/box.html'
@@ -216,7 +215,7 @@ uiModule.controller('EditBoxController',function($scope,boxUtils,$timeout){
 
     };
     $scope.save = function(){
-        $scope.$emit('editSave',$scope.editForm);
+        $scope.editSave($scope.editForm);
         $scope.$hide();
         $scope.$destroy();
     };

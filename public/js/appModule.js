@@ -48,9 +48,11 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
 
     var setEditView = function(){
             $scope.isEdit = false;
+             $scope.$broadcast('animateLeaveBox');
     };
     var setEditViewAndPush = function(data){
         $scope.isEdit = false;
+         $scope.$broadcast('animateLeaveBox');
         if(data){
             $scope.currentWorkspace.id = data.id;
             workspaceServices.changeWorkspace($scope.currentWorkspace);
@@ -65,7 +67,7 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
         }else{
             workspaceServices.updateWorkspace(setEditView,$scope.currentWorkspace);
         }
-        $scope.$broadcast('animateLeaveBox');
+
     };
 
     var rebuildWorkspace = function(){
