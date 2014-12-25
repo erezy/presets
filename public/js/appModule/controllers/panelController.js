@@ -1,5 +1,4 @@
-var app = angular.module('presets',['uiModule','serverModule']);
-app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','workspaceServices','$timeout',function($scope,WORKSPACE_SIZE,THEMES,workspaceServices,$timeout){
+app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','workspaceProvider','workspaceServices','$timeout',function($scope,WORKSPACE_SIZE,THEMES,workspaceProvider,workspaceServices,$timeout){
     $scope.themeOptions = THEMES;
     $scope.selectedTheme = $scope.themeOptions[0];
     $scope.lastWorkspace = {};
@@ -24,11 +23,11 @@ app.controller('ControlPanelController',['$scope','WORKSPACE_SIZE','THEMES','wor
         $scope.isEdit = true;
         $scope.resize = true;
         $scope.lastWorkspace = $scope.currentWorkspace;
-        $scope.currentWorkspace = workspaceServices.getNewWorkspace();
+        $scope.currentWorkspace = workspaceProvider.getNewWorkspace();
         $scope.isNew = true;
     };
     $scope.changeWorkspaceSize = function(){
-        workspaceServices.changeWorkspaceSize($scope.currentWorkspace);
+        workspaceProvider.changeWorkspaceSize($scope.currentWorkspace);
         rebuildWorkspace();
     }
 

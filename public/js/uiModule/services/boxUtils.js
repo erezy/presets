@@ -1,27 +1,5 @@
-var configModule = angular.module('configModule',['ngAnimate', 'mgcrea.ngStrap']);
-configModule.constant('WORKSPACE_SIZE', { row:4,col:5,sizeArray:[2,3,4,5,6] } );
-configModule.constant('BOX_TYPES',  [{id:1, name:'דף אינטרנט',form:"url",html:"types/iframe"},
-                                    {id:2, name:'קובץ',form:"file",html:"types/iframe"},
-                                    {id:3, name:'מצב עבודה',form:"",html:"types/workspaceStatus"},
-                                    {id:4, name:'מפה',form:"",html:"types/map"}]
-                        );
-configModule.constant('THEMES',  ['theme-1','theme-2','theme-3'] );
 
-configModule.filter('boxType',function(BOX_TYPES){
-    return function(typeId){
-                for(key in BOX_TYPES){
-                    var type = BOX_TYPES[key];
-                    if(type.id){
-                        if(type.id == typeId){
-                            return type.name;
-                        }
-                    }
-                }
-                return "";
-            }
-
-});
-configModule.service('boxUtils',function($window,BOX_TYPES){
+uiModule.service('boxUtils',function($window,BOX_TYPES){
     this.width = 0;
     this.height = 0;
     this.cols = 0;
@@ -171,21 +149,6 @@ configModule.service('boxUtils',function($window,BOX_TYPES){
         box.size = [1,1];
     };
 });
-configModule.config(function($datepickerProvider) {
-    var tomorrow = new Date();
-    angular.extend($datepickerProvider.defaults, {
-        dateFormat: 'dd/MM/yyyy',
-        minDate: tomorrow,
-        iconRight: 'glyphicon glyphicon-chevron-left',
-        iconLeft: 'glyphicon glyphicon-chevron-right'
-    });
-})
-configModule.config(function($modalProvider) {
-    angular.extend($modalProvider.defaults, {
-        animation: 'am-fade-and-scale',
-        backdrop:'static',
-        container: 'body'
-    });
-})
+
 
 
