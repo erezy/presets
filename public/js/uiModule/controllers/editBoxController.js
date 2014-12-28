@@ -5,15 +5,9 @@
 uiModule.controller('EditBoxController',function($scope,boxUtils,$timeout){
     $scope.boxTypes = boxUtils.getBoxTypes();
     $scope.title = "חלון עבודה" ;
-    $scope.$watch("formTempl",function(templ){
-        $scope.contentUrl = "";
-        if(templ) {
-            $scope.contentUrl = 'templates/forms/' + templ + '.html';
-        }
-    });
 
     var initBox = function(box){
-        $scope.formTempl = boxUtils.getTemplateByTypeId(box.typeId,true);
+        $scope.changeContentUrl(box.typeId);
         $scope.editForm.selectedBoxType = box.typeId ? $scope.boxTypes[box.typeId-1].id : "";
         $scope.editForm.data = box.formData;
     };
@@ -21,8 +15,14 @@ uiModule.controller('EditBoxController',function($scope,boxUtils,$timeout){
 
     $scope.changeForm = function(){
         $scope.editForm.data = {};
-        $scope.formTempl = boxUtils.getTemplateByTypeId($scope.editForm.selectedBoxType,true);
-
+        $scope.changeContentUrl($scope.editForm.selectedBoxType);
+    };
+    $scope.changeContentUrl = function(boxType){
+        $scope.contentUrl = "";
+        var templ = boxUtils.getTemplateByTypeId(boxType,true);
+        if(templ) {
+            $scope.contentUrl = 'templates/forms/' + templ + '.html';
+        }
     };
     $scope.save = function(){
         $scope.editSave($scope.editForm);

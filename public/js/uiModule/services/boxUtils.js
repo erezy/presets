@@ -5,11 +5,8 @@ uiModule.service('boxUtils',function($window,BOX_TYPES){
     this.cols = 0;
     this.rows = 0;
     this.headerHeight = 0;
-    this.getHeaderHeight = function(){
-        if(this.headerHeight == 0){
-            this.headerHeight = angular.element( document.querySelector( '.controlPanel' ) )[0].clientHeight;
-        }
-        return this.headerHeight;
+    this.setHeaderHeight = function(height){
+        this.headerHeight = height;
     };
     this.setBoxSize = function(workspace){
         this.cols = workspace.cols;
@@ -45,7 +42,7 @@ uiModule.service('boxUtils',function($window,BOX_TYPES){
         return "";
     };
     this.isInArea = function(box,borders){
-        var top = box.location[0]*(this.height+1)+this.getHeaderHeight();
+        var top = box.location[0]*(this.height+1)+this.headerHeight;
         var left = box.location[1]*(this.width+1)+15;
         var bottom = top + box.size[0]*this.height;
         var right = left + box.size[1]*this.width;
