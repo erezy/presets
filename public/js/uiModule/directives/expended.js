@@ -12,17 +12,15 @@ uiModule.directive('expended', ['$document', function($document) {
         return function (scope, element, attr) {
                 var startX = 0, startY = 0, x = 0, y = 0, styles = {};
                 var offsetY = 16, offsetX = 22;
+                var expendableElement;
                 element.on('mousedown', function (event) {
                     // Prevent default dragging of selected content
                     event.preventDefault();
+                    expendableElement = angular.element('<div expended class="expendable"></div>');
+                    element.append(expendableElement)
                     startY = event.pageY;
                     startX = event.pageX;
-                    element.css({
-                        opacity: '0.5',
-                        margin:'0px',
-                        width: '1px',
-                        height: '1px',
-                        position: 'absolute',
+                    expendableElement.css({
                         top: startY + 'px',
                         left: startX + 'px'
                     });
@@ -60,12 +58,12 @@ uiModule.directive('expended', ['$document', function($document) {
                         width: x1 + 'px',
                         height: y1 + 'px'
                     };
-                    element.css(styles);
+                    expendableElement.css(styles);
 
                     var top = startY + y - offsetY;
                     var left = startX + x - offsetX;
-                    var bottom = top + element[0].clientHeight;
-                    var right = left + element[0].clientWidth;
+                    var bottom = top + expendableElement[0].clientHeight;
+                    var right = left + expendableElement[0].clientWidth;
                     var borders = {top:top,left:left,bottom:bottom,right:right};
                     scope.$emit('checkOverlap',borders);
                 }
@@ -75,22 +73,11 @@ uiModule.directive('expended', ['$document', function($document) {
                     $document.off('mouseup', mouseup);
                     var top = startY + y - offsetY;
                     var left = startX + x - offsetX;
-                    var bottom = top + element[0].clientHeight;
-                    var right = left + element[0].clientWidth;
+                    var bottom = top + expendableElement[0].clientHeight;
+                    var right = left + expendableElement[0].clientWidth;
                     var borders = {top:top,left:left,bottom:bottom,right:right};
                     scope.$emit('expendBox',borders);
-                    var styles =  {
-                                width: '100%',
-                                height: '100%',
-                                opacity:'0',
-                                position: 'absolute',
-                                marginTop: '-30px',
-                                marginLeft: '-12px',
-                                top: 'initial',
-                                left: 'initial',
-                                zIndex:'20'
-                            };
-                    element.css(styles);
+                    expendableElement.remove();
                     angular.element(document.querySelector( 'workspace' )).addClass("nohover");
                     getParentElement(element,"options").removeClass("onselect");
                     getParentElement(element,"box").removeClass("topBox");
