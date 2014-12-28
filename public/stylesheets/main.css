@@ -2,7 +2,7 @@
     width: 10% !important;
     float:left;
 }
-.controlPanel{
+.control-panel{
     padding: 5px 5px;
 }
 .workspace{
@@ -24,7 +24,7 @@
     position: absolute;
     margin: 1px;
 }
-.fullBox, .inactive-box, .active-box{
+.full-box, .inactive-box, .active-box{
     width: 100%;
     height: 100%;
     border-radius: 0.2em;
@@ -110,32 +110,29 @@
     opacity: 0;
 }
 
-.wsStatus{
+.ws-status{
     width: 100%;
     height: 100%;
     text-align: right;
     padding: 15px;
     overflow: auto;
 }
-.wsStatus > p{
+.ws-status > p{
     text-decoration: underline;
     font-size: 1.5em;
 }
-.wsStatus > dl > dt{
+.ws-status > dl > dt{
      float: right;
      width: 160px;
      clear: right;
  }
-.wsStatus > dl > dd{
+.ws-status > dl > dd{
     float: right;
     height: 20px;
 }
 
 .iframe{
     height: 100%;
-}
-#cesiumContainer {
-    width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
 }
 
 .expendable {
@@ -145,10 +142,10 @@
     height: 1px;
     position: absolute;
 }
-.topBox{
+.top-box{
     z-index: 30;
 }
-.dragButton{
+.drag-button{
     height: 20px;
     width: 100%;
     border-radius: 0.2em;

@@ -26,7 +26,7 @@ uiModule.directive('expended', ['$document', function($document) {
                     });
                     angular.element(document.querySelector( 'workspace' )).removeClass("nohover");
                     getParentElement(element,"options").addClass("onselect");
-                    getParentElement(element,"box").addClass("topBox");
+                    getParentElement(element,"box").addClass("top-box");
 
                     $document.on('mousemove', mousemove);
                     $document.on('mouseup', mouseup);
@@ -80,7 +80,7 @@ uiModule.directive('expended', ['$document', function($document) {
                     expendableElement.remove();
                     angular.element(document.querySelector( 'workspace' )).addClass("nohover");
                     getParentElement(element,"options").removeClass("onselect");
-                    getParentElement(element,"box").removeClass("topBox");
+                    getParentElement(element,"box").removeClass("top-box");
                 }
             }
     }]);

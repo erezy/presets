@@ -58,7 +58,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
             $scope.$on('setTheChosenOne',function(event,chosenId){
                 event.stopPropagation();
                 this.chosenId = chosenId;
-                boxUtils.setHeaderHeight(angular.element( document.querySelector( '.controlPanel' ) )[0].clientHeight);
+                boxUtils.setHeaderHeight(angular.element( document.querySelector( '.control-panel' ) )[0].clientHeight);
             });
             $scope.$on('expendBox',function(event,borders){
                 event.stopPropagation();
