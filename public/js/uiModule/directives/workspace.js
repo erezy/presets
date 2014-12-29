@@ -79,7 +79,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
 
         },
         link: function (scope,element, attrs) {
-            scope.$watchGroup(['currWorkspace'],function() {
+            scope.$watch('currWorkspace',function() {
                 if(scope.currWorkspace){
                     boxUtils.setBoxSize(scope.currWorkspace);
                 }
