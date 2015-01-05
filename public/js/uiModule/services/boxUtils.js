@@ -13,6 +13,7 @@ uiModule.service('boxUtils',function($window,BOX_TYPES){
         this.rows = workspace.rows;
         this.width = Math.floor($window.innerWidth/this.cols) - 24/this.cols;
         this.height = Math.floor(($window.innerHeight-45)/this.rows) - 48/this.rows;
+        //console.log("wh",this.width,this.height,this.headerHeight,$window.innerWidth,$window.innerHeight);
     };
     this.getBoxTypes = function(){
         return BOX_TYPES;
@@ -75,7 +76,7 @@ uiModule.service('boxUtils',function($window,BOX_TYPES){
                         return null;
                     }
                 }
-                maxLocation = this.getMaxLocation(box);
+                var maxLocation = this.getMaxLocation(box);
                 if(box.location[0] < minRow){
                     minRow = box.location[0];
                 }
@@ -128,7 +129,6 @@ uiModule.service('boxUtils',function($window,BOX_TYPES){
     this.deleteBox = function(boxes,boxId){
         this.collapseBox(boxes,boxId);
         var box = boxes[boxId];
-        delete box.url;
         delete box.typeId;
         delete box.isSet;
     };
