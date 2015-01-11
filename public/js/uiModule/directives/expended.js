@@ -17,7 +17,7 @@ uiModule.directive('expended', ['$document', function($document) {
                     // Prevent default dragging of selected content
                     event.preventDefault();
                     expendableElement = angular.element('<div expended class="expendable"></div>');
-                    element.append(expendableElement)
+                    element.append(expendableElement);
                     startY = event.pageY;
                     startX = event.pageX;
                     expendableElement.css({

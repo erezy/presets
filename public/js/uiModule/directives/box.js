@@ -44,6 +44,8 @@ uiModule.directive('box',function(boxUtils,$timeout){
         controller: function ($scope,$sce) {
             $scope.changeTemplate = function(){
                var box = $scope.box;
+               $scope.dropChannel = "active";
+               $scope.draggable = false;
                if(box.isSet){
                     var templ =  boxUtils.getTemplateByTypeId(box.typeId,false);
                     $scope.viewContentUrl ='templates/' + templ + '.html';
@@ -51,11 +53,15 @@ uiModule.directive('box',function(boxUtils,$timeout){
                         $timeout(function (){ $scope.maps[box.id] = new Cesium.Viewer('cesiumContainer'+box.id);},100);
                     }
                     $scope.editContentUrl ='templates/activeBox.html';
-                    $scope.draggable = true;
+                   if(box.size[0] == 1 && box.size[1] == 1){
+                       $scope.draggable = true;
+                   }else{
+                       $scope.collapse = true;
+                       $scope.dropChannel = "notActive";
+                   }
                }else{
                     $scope.viewContentUrl = '';
                     $scope.editContentUrl ='templates/inactiveBox.html';
-                    $scope.draggable = false;
                }
             };
             $scope.getSrc = function(){
@@ -76,9 +82,6 @@ uiModule.directive('box',function(boxUtils,$timeout){
                 box.isSet = true;
                 box.formData = form.data;
                 box.typeId = form.selectedBoxType;
-                if(box.size[0] == 1 && box.size[1] == 1){
-                    $scope.draggable = true;
-                }
                 $scope.changeTemplate();
             };
 

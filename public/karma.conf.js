@@ -20,10 +20,13 @@ module.exports = function(config) {
         'bower_components/angular-animate/angular-animate.js',
         'bower_components/angular-native-dragdrop/**/*.js',
         'angular-strap/angular-strap.js',
+        'cesium/Build/Cesium/Cesium.js',
         'js/*/*.js',
         'js/**/*.js',
         'test/spec/*/*.js',
-        'test/spec/**/*.js'
+        'test/spec/**/*.js',
+        'templates/*.html',
+        'templates/*/*.html'
     ],
 
 
@@ -35,6 +38,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+        'templates/*.html': 'ng-html2js',
+        'templates/*/*.html': 'ng-html2js'
     },
 
 

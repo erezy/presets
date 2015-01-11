@@ -47,7 +47,7 @@ describe("appModule", function(){
                     var millisecondsPerDay = 1000 * 60 * 60 * 24;
                     var millisBetween = newWorkspace.expired.getTime() - today.getTime();
                     var days = millisBetween / millisecondsPerDay;
-                    days = Math.floor(days);
+                    days = Math.round(days);
                     expect(days).toBe(1);
                 });
             });

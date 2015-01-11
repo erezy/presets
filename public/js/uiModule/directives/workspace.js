@@ -28,7 +28,7 @@ uiModule.directive('workspace',function($compile,boxUtils){
         },
         controller: function ($scope) {
             $scope.maps = [];
-            this.chosenId = null;
+            $scope.chosenId = null;
             $scope.dragBox = function(boxId,droppedBoxId){
                 var boxes = $scope.currWorkspace.tiles;
                 boxUtils.switchBoxes(boxes,boxId,droppedBoxId);
@@ -57,24 +57,28 @@ uiModule.directive('workspace',function($compile,boxUtils){
 
             $scope.$on('setTheChosenOne',function(event,chosenId){
                 event.stopPropagation();
-                this.chosenId = chosenId;
-                boxUtils.setHeaderHeight(angular.element( document.querySelector( '.control-panel' ) )[0].clientHeight);
+                $scope.chosenId = chosenId;
+                var clientHeight = 0;
+                if(angular.element( document.querySelector( '.control-panel' ) )[0]){
+                    clientHeight = angular.element( document.querySelector( '.control-panel' ) )[0].clientHeight;
+                }
+                boxUtils.setHeaderHeight(clientHeight);
             });
             $scope.$on('expendBox',function(event,borders){
                 event.stopPropagation();
                 $scope.$apply(function() {
                     var boxes = $scope.currWorkspace.tiles;
-                    var result = boxUtils.getNewBoxArray(boxes, borders, this.chosenId);
+                    var result = boxUtils.getNewBoxArray(boxes, borders, $scope.chosenId);
                     if (result != null) {
                         $scope.$emit('updateWorkspace');
                     }
                 });
-                this.chosenId = null;
+                $scope.chosenId = null;
             });
             $scope.$on('checkOverlap',function(event,borders){
                 event.stopPropagation();
                 var boxes = $scope.currWorkspace.tiles;
-                $scope.$apply(function(){boxUtils.checkOverlap(boxes,borders,this.chosenId,false);});
+                $scope.$apply(function(){boxUtils.checkOverlap(boxes,borders,$scope.chosenId,false);});
             });
 
         },
